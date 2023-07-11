@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from "react-router-dom";
 import video from './Assets/video.mp4.mp4';
 import './Landing_Page.css';
 
@@ -16,8 +17,10 @@ const LandingPage = ({ onSubProjectClick, subProjects, onSubProjectButtonClick }
         if (isTitleEntered) {
             const subProject = {
                 id: subProjects.length + 1,
-                title: subProjectData
+                title: subProjectData,
+                cards: []
             };
+            console.log("handleSubProjectClick@subProject: " + JSON.stringify(subProject));
             onSubProjectClick(subProject);
             setSubProjectData('');
             setIsTitleEntered(false);
@@ -52,10 +55,7 @@ const LandingPage = ({ onSubProjectClick, subProjects, onSubProjectButtonClick }
                     <ul className="sub-projects-list">
                         {subProjects.map((subProject) => (
                             <li className="sub-project-item" key={subProject.id}>
-                                <button
-                                    className="sub-project-button"
-                                    onClick={() => onSubProjectButtonClick(subProject.id)}
-                                >
+                                <button className="sub-project-button" onClick={() => onSubProjectButtonClick(subProject.id)}>
                                     {subProject.id + '  : ' + subProject.title}
                                 </button>
                             </li>
