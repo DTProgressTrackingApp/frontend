@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import video from './Assets/video.mp4.mp4';
 import './Landing_Page.css';
 
-const LandingPage = ({ onSubProjectClick, subProjects, onSubProjectButtonClick }) => {
+const LandingPage = ({ onSubProjectClick, subProjects, onSubProjectButtonClick, currentUser }) => {
     const [subProjectData, setSubProjectData] = useState('');
     const [isTitleEntered, setIsTitleEntered] = useState(false);
 
@@ -18,7 +18,8 @@ const LandingPage = ({ onSubProjectClick, subProjects, onSubProjectButtonClick }
             const subProject = {
                 id: subProjects.length + 1,
                 title: subProjectData,
-                cards: []
+                cards: [],
+                members: []
             };
             console.log("handleSubProjectClick@subProject: " + JSON.stringify(subProject));
             onSubProjectClick(subProject);
@@ -41,19 +42,21 @@ const LandingPage = ({ onSubProjectClick, subProjects, onSubProjectButtonClick }
                     </div>
                     <div className="sub-projects-container">
                         <h3 className="sub-projects-heading">Projects :</h3>
-                        <input
-                            type="text"
-                            value={subProjectData}
-                            onChange={handleSubProjectDataChange}
-                            placeholder="Enter project title"
-                            className="sub-project-title-input"
-                        />
-                        <button className="add-project-button" onClick={handleSubProjectClick} disabled={!isTitleEntered}>
-                            Create project
-                        </button>
+                        {
+                            currentUser.role == "MANAGER" &&
+                                [
+                                    <input type="text" value={subProjectData}
+                                       onChange={handleSubProjectDataChange}
+                                       placeholder="Enter project title"
+                                       className="sub-project-title-input" />,
+                                    <button className="add-project-button" onClick={handleSubProjectClick} disabled={!isTitleEntered}>
+                                        Create project
+                                    </button>
+                                ]
+                        }
                     </div>
                     <ul className="sub-projects-list">
-                        {subProjects.map((subProject) => (
+                            {subProjects.map((subProject) => (
                             <li className="sub-project-item" key={subProject.id}>
                                 <button className="sub-project-button" onClick={() => onSubProjectButtonClick(subProject.id)}>
                                     {subProject.id + '  : ' + subProject.title}

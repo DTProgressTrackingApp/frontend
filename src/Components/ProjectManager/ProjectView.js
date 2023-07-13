@@ -1,18 +1,33 @@
 import Sub_Project from "../../Sub_Project.js";
 import LandingPage from "../../Landing_Page.js";
 import React, {useState} from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 export const ProjectView = () => {
-    const [subProjects, setSubProjects] = useState([]);
+    const location = useLocation();
+
+    const user = location.state;
+    const [subProjects, setSubProjects] = useState(() => {
+        let allCurrentProjects = JSON.parse(localStorage.getItem("prac-kanban"));
+        if (!allCurrentProjects) {
+            return [];
+        }
+        if (user.role == 'MANAGER') {
+            return allCurrentProjects;
+        }
+        allCurrentProjects = allCurrentProjects.filter(item => {
+            return item.members.includes(user.email);
+        })
+        return allCurrentProjects;
+    });
     const [activeSubProject, setActiveSubProject] = useState(null);
-    const navigate = useNavigate();
 
     const handleSubProjectClick = (subProjectData) => {
         const newSubProject = {
             id: subProjects.length + 1,
             title: subProjectData.title, // Store the sub project title
-            cards: []
+            cards: subProjectData.cards,
+            members: subProjectData.members
         };
         const allProjects = [...subProjects, newSubProject];
         localStorage.setItem("prac-kanban", JSON.stringify(allProjects));
@@ -37,6 +52,7 @@ export const ProjectView = () => {
                     onSubProjectClick={handleSubProjectClick}
                     subProjects={subProjects}
                     onSubProjectButtonClick={handleSubProjectButtonClick}
+                    currentUser = {user}
                 />
             )}
         </div>

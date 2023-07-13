@@ -3,8 +3,11 @@ import './App.css';
 import KanbanApp from './KanbanApp.js';
 import Leftside from './Components/Leftside/Leftside.js';
 import Project_title from './Components/Project_title.js';
+import {AssignMemberModal} from "./Components/Modal/AssignMemberModal.js";
+import {set} from "react-hook-form";
 
 function Sub_Project({ subProject, onBackButtonClick, props }) {
+    const [isOpen, setIsOpen] = useState(false);
     const [cards, setCards] = useState([]);
     const [budget, setBudget] = useState(0);
     const [completed, setCompleted] = useState(0);
@@ -58,6 +61,8 @@ function Sub_Project({ subProject, onBackButtonClick, props }) {
                     <Project_title {...props} budget={budget} setBudget={handleBudgetChange} />
                     <Leftside cards={cards} budget={budget} progress={{completed: completed, incompleted: incompleted}} />
                 </div>
+                <button className="assign_button" onClick={() => setIsOpen(true)}><span>Assign member</span></button>
+                {isOpen && <AssignMemberModal project={subProject} setIsOpen={setIsOpen} />}
                 <button className="back_button" onClick={onBackButtonClick}><span>&#8680;</span></button>
                 <KanbanApp  />
             </div>

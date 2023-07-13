@@ -5,25 +5,45 @@ import { useNavigate } from "react-router-dom"
 import { login, logout, authHeader } from "../../Service/AuthService.js";
 
 const Login = () => {
-    const { handleSubmit, register, formState: { errors } } = useForm();
+    const { handleSubmit, register, setError, formState: { errors } } = useForm();
     const navigate = useNavigate();
 
     const handleLogin = (values) => {
         console.log("Login:" + values.email + " " + values.password);
-        // const response = login(values.email, values.password)
-        navigate("/manager/view");
-        window.location.reload();
-            // .then((data) => {
-            //     console.log("Data login: " + data);
-            //     if (data) {
-            //         if (data.role == "MANAGER") {
-            //             navigate("/manager/dashboard");
-            //             window.location.reload();
-            //         }
-            //     }
-            // }, (error) => {
-            //
-            // });
+        login(values.email, values.password)
+            .then((response) => {
+                console.log("Login RES: " + JSON.stringify(response))
+                if (response.status == 200) {
+                    if (response.data) {
+                        localStorage.setItem("token", JSON.stringify(response.data.token));
+                        if (response.data.user.role == "MANAGER") {
+                            navigate("/manager/projects/dashboard", { state: response.data.user });
+                        } else {
+                            navigate("/member/projects/dashboard", { state: response.data.user });
+                        }
+                        window.location.reload();
+                    }
+                }
+            }, (error) => {
+                console.log("Login ERROR: " + JSON.stringify(error))
+                if (error.response.status != 200) {
+                    if (error.response.status == 400) {
+                        // do something
+                        console.log("error 400");
+                        setError('email', {
+                            type: 'server-400',
+                            message: error.response.data.message
+                        })
+                    } else if (error.response.status == 403) {
+                        // do something
+                        console.log("error 403");
+                        setError('email', {
+                            type: 'server-403',
+                            message: error.response.data.message
+                        })
+                    }
+                }
+            });
     }
 
     return (
@@ -51,10 +71,10 @@ const Login = () => {
                             placeholder="Password"
                             {...register("password", {
                                 required: "Required",
-                                pattern: {
-                                    value: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/,
-                                    message: "Password requirements: 8-20 characters, 1 number, 1 letter, 1 symbol."
-                                }
+                                // pattern: {
+                                //     value: /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/,
+                                //     message: "Password requirements: 8-20 characters, 1 number, 1 letter, 1 symbol."
+                                // }
                             })}
                         />
                         {errors.password && errors.password.message}
