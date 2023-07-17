@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from "react-router-dom";
 import video from './Assets/video.mp4.mp4';
 import './Landing_Page.css';
+import {Logout} from "./Components/Auth/Logout.js";
 
 const LandingPage = ({ onSubProjectClick, subProjects, onSubProjectButtonClick, currentUser }) => {
     const [subProjectData, setSubProjectData] = useState('');
@@ -35,6 +36,7 @@ const LandingPage = ({ onSubProjectClick, subProjects, onSubProjectButtonClick, 
                     <div className="video-container">
                         {/*<video src={video} autoPlay loop muted className="background-video" />*/}
                     </div>
+                    {/*<Logout />*/}
                 </div>
                 <div className="content-container">
                     <div className="h1-container">

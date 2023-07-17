@@ -46,6 +46,7 @@ export const ProjectView = () => {
                 <Sub_Project
                     subProject={subProjects.find(subProject => subProject.id === activeSubProject)}
                     onBackButtonClick={() => setActiveSubProject(null)}
+                    currentUser = {user}
                 />
             ) : (
                 <LandingPage

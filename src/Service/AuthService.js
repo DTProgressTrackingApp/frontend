@@ -13,15 +13,24 @@ export const login = (email, password) => {
 }
 
 export const logout = () => {
-    localStorage.removeItem("token");
+    return axios
+        .post(API_URL + "logout", null, authHeader())
+        .then((response) => {
+            return response;
+        }, (error) => {
+            throw error;
+        });
 }
 
-export const authHeader = () => {
+const authHeader = () => {
+    const token = localStorage.getItem("token");
 
-    const user = JSON.parse(localStorage.getItem("token"));
-
-    if (user && user.token) {
-        return { Authorization: "Bearer " + user.token };
+    if (token) {
+        return  {
+            headers: {
+                Authorization: "Bearer " + token
+            }
+        };
     } else {
         return {};
     }
