@@ -1,10 +1,21 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import "./AssignMemberModal.css";
 import { useForm } from "react-hook-form";
+import {authToken} from "../../Service/AuthService.js";
+import {useNavigate} from "react-router-dom";
 
 export const AssignMemberModal = ({project, setIsOpen}) => {
     const {clearErrors, register, setError, formState: { errors } } = useForm();
     const [reload, setReload] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // only runs once
+        console.log('Run auth token once');
+        if (!authToken()) {
+            navigate("/") // Redirect to login page
+        }
+    }, []);
 
     const removeEmailMember = (e) => {
         e.preventDefault();
@@ -48,6 +59,10 @@ export const AssignMemberModal = ({project, setIsOpen}) => {
         project.members.push(email);
         const index = allCurrentProj.findIndex((obj => obj.id == project.id));
         allCurrentProj[index].members.push(email);
+        if (!authToken()) {
+            navigate("/") // Redirect to login page
+            return;
+        }
         localStorage.setItem("prac-kanban", JSON.stringify(allCurrentProj));
         setReload(true);
         clearErrors("email")

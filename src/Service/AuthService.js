@@ -22,6 +22,21 @@ export const logout = () => {
         });
 }
 
+export const authToken = () => {
+    return axios
+        .get(API_URL + "health", authHeader())
+        .then((response) => {
+            if (response.status != 200) {
+                return false;
+            }
+            return true;
+        }, (error) => {
+            console.log("Error auth token: " + JSON.stringify(error));
+            alert("Error auth token");
+            return false;
+        });
+}
+
 const authHeader = () => {
     const token = localStorage.getItem("token");
 

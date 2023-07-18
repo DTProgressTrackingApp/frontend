@@ -1,12 +1,22 @@
 import Sub_Project from "../../Sub_Project.js";
 import LandingPage from "../../Landing_Page.js";
-import React, {useState} from "react";
-import { useLocation } from "react-router-dom";
+import React, {useEffect, useState} from "react";
+import {useLocation, useNavigate} from "react-router-dom";
+import {authToken} from "../../Service/AuthService.js";
 
 export const ProjectView = () => {
     const location = useLocation();
-
+    const navigate = useNavigate();
     const user = location.state;
+
+    useEffect(() => {
+        // only runs once
+        console.log('Run auth token once');
+        if (!authToken()) {
+            navigate("/") // Redirect to login page
+        }
+    }, []);
+
     const [subProjects, setSubProjects] = useState(() => {
         let allCurrentProjects = JSON.parse(localStorage.getItem("prac-kanban"));
         if (!allCurrentProjects) {

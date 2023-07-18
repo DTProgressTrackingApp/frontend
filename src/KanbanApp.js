@@ -5,11 +5,14 @@ import { getBoardWeightSum } from "./Components/Work_D_Chart/helpers.js";
 
 import "./KanbanApp.css";
 import Editable from "./Components/Editabled/Editable.js";
+import {authToken} from "./Service/AuthService.js";
+import {useNavigate} from "react-router-dom";
 
 function KanbanApp() {
-  const [boards, setBoards] = useState(
-      JSON.parse(localStorage.getItem("prac-kanban")) || []
-  );
+  const navigate = useNavigate();
+  const [boards, setBoards] = useState(() => {
+    return JSON.parse(localStorage.getItem("prac-kanban")) || []
+  });
   // const [incompleted, setIncompleted] = useState(0);
   // const [completed, setCompleted] = useState(0)
   //
@@ -19,7 +22,13 @@ function KanbanApp() {
   // if(boards.length > 2)
   //   setCompleted(boards[2])
 
-
+  useEffect(() => {
+    // only runs once
+    console.log('Run auth token once');
+    if (!authToken()) {
+      navigate("/") // Redirect to login page
+    }
+  }, []);
 
   const addCardHandler = (id, title) => {
     const index = boards.findIndex((item) => item.id === id);
