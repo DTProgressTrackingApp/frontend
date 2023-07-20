@@ -31,6 +31,7 @@ function KanbanApp() {
   }, []);
 
   const addCardHandler = (id, title) => {
+    console.log("addCardHandle: " + id + ", title: " + title);
     const index = boards.findIndex((item) => item.id === id);
     if (index < 0) return;
 

@@ -18,14 +18,31 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser, props }) {
     );
 
     useEffect(() => {
-        console.log(boards)
-        if(boards.length > 1)
-            setIncompleted(boards[0].cards.length + boards[1].cards.length)
+        console.log("Board: " + JSON.stringify(boards));
+        let inCompletedPercent = 0;
+        let completedPercent = 0;
+        if (boards[1]) {
+            boards[1].cards.forEach((card) => {
+                inCompletedPercent += (card.achievedWeight * card.weight) / 100;
+            })
+        }
+        if (boards[2]) {
+            boards[2].cards.forEach((card) => {
+                completedPercent += (card.achievedWeight * card.weight) / 100;
+            })
+        }
+        if (inCompletedPercent == 0 && completedPercent == 0) { // Dont have completed task & progess task
+            inCompletedPercent = 100;
+        }
+        setIncompleted(inCompletedPercent);
+        setCompleted(completedPercent);
+        // if(boards.length > 1)
+        //     setIncompleted(boards[0].cards.length + boards[1].cards.length)
+        // if(boards.length > 2)
+        //     setCompleted(boards[2].cards.length)
 
-        if(boards.length > 2)
-            setCompleted(boards[2].cards.length)
-
-        console.log(completed, incompleted)
+        console.log("completed " + completed);
+        console.log("inCompleted " + incompleted);
     }, [boards])
 
     const handleAddCard = () => {
@@ -59,7 +76,7 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser, props }) {
                 <div className="column-container">
                     <h2 className="project_title">{subProject.id + ' ' + subProject.title}</h2>
                     <Project_title {...props} budget={budget} setBudget={handleBudgetChange} />
-                    <Leftside cards={cards} budget={budget} progress={{completed: completed, incompleted: incompleted}} />
+                    <Leftside cards={cards} budget={budget} progress={{completed, incompleted}} />
                 </div>
                 {
                     currentUser.role == "MANAGER" && <button className="assign_button" onClick={() => setIsOpen(true)}><span>Assign member</span></button>

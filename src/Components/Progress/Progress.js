@@ -4,6 +4,8 @@ import 'chart.js/auto';
 import './Progress.css';
 const Progress = ({completed, incompleted}) => {
     // const Progress = ({ cards, sumOfResults }) => {
+    console.log("ProgessCompleted: " + completed);
+    console.log("ProgessIncompleted: " + incompleted);
     const data = {
         labels: ["Weighted", "Remaining"],
         datasets: [

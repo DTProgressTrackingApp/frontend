@@ -12,9 +12,8 @@ const Leftside = ({cards, budget, progress}) => {
         (total, card) => total + parseInt(card.result),
         0
     );
-    console.log(progress)
-    const [completed, setCompleted] = useState(progress?.completed);
-    const [incompleted, setIncompleted] = useState(progress?.incompleted);
+    const [completed, setCompleted] = useState(progress.completed);
+    const [incompleted, setIncompleted] = useState(progress.incompleted);
 
 
     return (
@@ -23,7 +22,7 @@ const Leftside = ({cards, budget, progress}) => {
             <div>
                 <div className="title">Progress</div>
                 <div className="C_body">
-                    <Progress sumOfResults={sumOfResults} incompleted={incompleted} completed={completed}/>
+                    <Progress sumOfResults={sumOfResults} incompleted={progress.incompleted} completed={progress.completed}/>
                 </div>
             </div>
         <div>
