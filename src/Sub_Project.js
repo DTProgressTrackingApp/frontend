@@ -6,77 +6,91 @@ import Project_title from './Components/Project_title.js';
 import {AssignMemberModal} from "./Components/Modal/AssignMemberModal.js";
 import {Logout} from "./Components/Auth/Logout.js";
 
-function Sub_Project({ subProject, onBackButtonClick, currentUser, props }) {
+function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
     const [isOpen, setIsOpen] = useState(false);
     const [cards, setCards] = useState([]);
-    const [budget, setBudget] = useState(0);
+    const [budget, setBudget] = useState(() => {
+        const storedValues = localStorage.getItem("projectValues");
+        if (storedValues) {
+            const value = JSON.parse(storedValues);
+            return value.budget;
+        } else {
+            return 0;
+        }
+    });
     const [completed, setCompleted] = useState(0);
     const [incompleted, setIncompleted] = useState(0);
-
-    const [boards, setBoards] = useState(
-        JSON.parse(localStorage.getItem("prac-kanban")) || []
-    );
+    const [todoWeight, setTodoWeight] = useState(0);
+    const [progressWeight, setProgressWeight] = useState(0);
+    const [finishWeight, setFinishWeight] = useState(0);
+    const [incurredCost, setIncurredCost] = useState(0);
+    const [project, setProject] = useState(subProject);
 
     useEffect(() => {
-        console.log("Board: " + JSON.stringify(boards));
+        console.log("Init board: " + JSON.stringify(project));
         let inCompletedPercent = 0;
         let completedPercent = 0;
-        if (boards[1]) {
-            boards[1].cards.forEach((card) => {
-                inCompletedPercent += (card.achievedWeight * card.weight) / 100;
+        let todoWeightPercent = 0;
+        let progressWeightPercent = 0;
+        let finishWeightPercent = 0;
+        let incurredCostPercent = 0;
+
+        if (project.todoTask) {
+            project.todoTask.forEach((card) => {
+                if (card.weight) {
+                    todoWeightPercent += parseInt(card.weight);
+                }
             })
         }
-        if (boards[2]) {
-            boards[2].cards.forEach((card) => {
-                completedPercent += (card.achievedWeight * card.weight) / 100;
+
+        if (project.progressTask) {
+            project.progressTask.forEach((card) => {
+                if (card.achievedWeight && card.weight) {
+                    inCompletedPercent += (card.achievedWeight * card.weight) / 100;
+                }
+                if (card.weight) {
+                    progressWeightPercent += parseInt(card.weight);
+                }
+                if (card.cic) {
+                    incurredCostPercent += parseInt(card.cic);
+                }
             })
         }
-        if (inCompletedPercent == 0 && completedPercent == 0) { // Dont have completed task & progess task
-            inCompletedPercent = 100;
+        if (project.finishTask) {
+            project.finishTask.forEach((card) => {
+                if (card.achievedWeight && card.weight) {
+                    completedPercent += (card.achievedWeight * card.weight) / 100;
+                }
+                if (card.weight) {
+                    finishWeightPercent += parseInt(card.weight);
+                }
+                if (card.cic) {
+                    incurredCostPercent += parseInt(card.cic);
+                }
+            })
         }
         setIncompleted(inCompletedPercent);
         setCompleted(completedPercent);
-        // if(boards.length > 1)
-        //     setIncompleted(boards[0].cards.length + boards[1].cards.length)
-        // if(boards.length > 2)
-        //     setCompleted(boards[2].cards.length)
+        setTodoWeight(todoWeightPercent);
+        setProgressWeight(progressWeightPercent);
+        setFinishWeight(finishWeightPercent);
+        setIncurredCost(incurredCostPercent);
 
-        console.log("completed " + completed);
-        console.log("inCompleted " + incompleted);
-    }, [boards])
-
-    const handleAddCard = () => {
-        setCards([...cards, { weight: "", achievedWeight: "", result: 0 }]);
-    };
+        console.log("completed " + completedPercent + ",inCompleted: " + inCompletedPercent + ",todoWeight: " + todoWeightPercent
+            + ",progressWeight: " + progressWeightPercent + ",finishWeight: " + finishWeightPercent + ",incurredCost: " + incurredCostPercent);
+    }, [project])
 
     const handleBudgetChange = (b) => {
         setBudget(b)
     }
-
-    const handleRemoveCard = (index) => {
-        const updatedCards = [...cards];
-        updatedCards.splice(index, 1);
-        setCards(updatedCards);
-    };
-
-    const handleCardChange = (index, updatedCard) => {
-        const updatedCards = [...cards];
-        updatedCards[index] = updatedCard;
-        setCards(updatedCards);
-    };
-
-    const sumOfResults = cards.reduce(
-        (total, card) => total + parseInt(card.result),
-        0
-    );
 
     return (
         <div className="Sub_Project">
             <div className="container scrollable">
                 <div className="column-container">
                     <h2 className="project_title">{subProject.id + ' ' + subProject.title}</h2>
-                    <Project_title {...props} budget={budget} setBudget={handleBudgetChange} />
-                    <Leftside cards={cards} budget={budget} progress={{completed, incompleted}} />
+                    <Project_title budget={budget} setBudget={handleBudgetChange} />
+                    <Leftside cards={cards} incurredCost={incurredCost} budget={budget} progress={{completed, incompleted, todoWeight, progressWeight, finishWeight}} />
                 </div>
                 {
                     currentUser.role == "MANAGER" && <button className="assign_button" onClick={() => setIsOpen(true)}><span>Assign member</span></button>
@@ -84,7 +98,7 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser, props }) {
                 {isOpen && <AssignMemberModal project={subProject} setIsOpen={setIsOpen} />}
                 <Logout />
                 <button className="back_button" onClick={onBackButtonClick}><span>&#8680;</span></button>
-                <KanbanApp  />
+                <KanbanApp currentProject={subProject} setProject={project => setProject(project)} />
             </div>
         </div>
     );

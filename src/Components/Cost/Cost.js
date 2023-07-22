@@ -6,35 +6,25 @@ import CardCost from "./CardCost.js";
 
 import { useSelector } from 'react-redux';
 
-const Cost = ({  budget}) => {
+const Cost = ({incurredCost, budget}) => {
 
     const taskBudget = useSelector((state) => state.taskBudget);
     const cic = useSelector((state) => state.cic);
     console.log("budget cic:", cic);
-
-    console.log("budget cost:", budget);
-
-    // console.log("task budget cost:", taskBudget);
-
-
+    // console.log("todo budget:", props?.todo?.budget + ", incurred cost: " + props?.todo?.incurredCost );
+    // console.log("progress budget:", props?.progress?.budget + ", incurred cost: " + props?.progress?.incurredCost );
+    // console.log("completed budget:", props?.completed?.budget + ", incurred cost: " + props?.completed?.incurredCost );
     const labels = ["Task Est. Budget", "Incurred Cost"];
     const data = {
         labels: labels,
         datasets: [
             {
-                label: "Expenditure",
+                label: "Budget-Incurred cost",
                 borderColor: "rgb(0,0,0)",
-                data: [taskBudget, cic],
-                backgroundColor: ["rgb(157,250,208)", "rgb(203,156,156)"],
-            },
-            {
-                label: "Budget",
-                borderColor: "rgb(0,0,0)",
-                data: [budget, budget],
-                // data: [80, 100 - 80],
+                data: [budget, incurredCost],
                 type: "line",
                 backgroundColor: ["rgb(197,201,204)"],
-            },
+            }
         ],
     };
 

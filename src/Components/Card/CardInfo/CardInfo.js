@@ -15,10 +15,7 @@ function CardInfo(props) {
     const taskId = uuidv4();
 
 
-    const [values, setValues] = useState({
-        ...props.card,
-        ...props.cardId,
-    });
+    const [values, setValues] = useState(props.card);
 
 
     const updateTitle = (value) => {
@@ -76,29 +73,29 @@ function CardInfo(props) {
 
 
 
-    const addTask = (value) => {
-        const task = {
+    const addSubTask = (value) => {
+        const subTask = {
             id: Date.now() + Math.random() * 2,
             completed: false,
             text: value,
         };
         setValues({
             ...values,
-            tasks: [...values.tasks, task],
+            subTasks: [...values.subTasks, subTask],
         });
     };
 
 
-    const updateTask = (id, field, value) => {
-        const tasks = [...values.tasks];
-        const taskIndex = tasks.findIndex((item) => item.id === id);
+    const updateSubTask = (id, field, value) => {
+        const subTasks = [...values.subTasks];
+        const taskIndex = subTasks.findIndex((item) => item.id === id);
         if (taskIndex < 0) return;
 
-        tasks[taskIndex][field] = value;
+        subTasks[taskIndex][field] = value;
 
         setValues({
             ...values,
-            tasks: tasks,
+            subTasks: subTasks,
         });
     };
 
@@ -116,37 +113,41 @@ function CardInfo(props) {
 
 
     const updateValues = async () => {
-        const taskRef = doc(db, "taskInfo", taskId);
-
-        // Update the document with the new values
-        await updateDoc(taskRef, {
-            title:values.title,
-            desc: values.desc,
-            kpi: values.kpi,
-            cic: values.cic,
-            taskBudget: values.taskBudget,
-            weight: values.weight,
-            achievedWeight: values.achievedWeight,
-        });
+        alert("Save task successfully");
+        props.updateCard(values);
+        // const taskRef = doc(db, "taskInfo", taskId);
+        //
+        // // Update the document with the new values
+        // await updateDoc(taskRef, {
+        //     title:values.title,
+        //     desc: values.desc,
+        //     kpi: values.kpi,
+        //     cic: values.cic,
+        //     taskBudget: values.taskBudget,
+        //     weight: values.weight,
+        //     achievedWeight: values.achievedWeight,
+        // });
 
         console.log(" updated values in Firestore");
     };
 
-    const updateSubValues = async (subTaskId) => {
-        const subTaskRef = doc(db, "taskInfo", subTaskId);
+    const updateSubValues = async () => {
+        alert("Save subtask successfully");
+        props.updateCard(values);
+        // const subTaskRef = doc(db, "taskInfo", subTaskId);
 
         // Update the document with the new values
-        await updateDoc(subTaskRef, {
-            subTitle:values.subTitle,
-        subDescription:values.subDescription,
-        subPlannedStartDate:values.subPlannedStartDate,
-        subPlannedEndDate:values.subPlannedEndDate,
-        subActualStartDate:values.subActualStartDate,
-        subActualEndDate:values.subActualEndDate,
-        subStatus:values.subStatus,
-        subRemark:values.subRemark,
-        subMembersAssigned:values.subMembersAssigned,
-        });
+        // await updateDoc(subTaskRef, {
+        //     subTitle:values.subTitle,
+        // subDescription:values.subDescription,
+        // subPlannedStartDate:values.subPlannedStartDate,
+        // subPlannedEndDate:values.subPlannedEndDate,
+        // subActualStartDate:values.subActualStartDate,
+        // subActualEndDate:values.subActualEndDate,
+        // subStatus:values.subStatus,
+        // subRemark:values.subRemark,
+        // subMembersAssigned:values.subMembersAssigned,
+        // });
 
         console.log(" updated sub values in Firestore");
     };
@@ -154,7 +155,10 @@ function CardInfo(props) {
 
 
     useEffect(() => {
-        if (props.updateCard) props.updateCard(props.boardId, values.id, values, weight);
+        console.log("values: " + JSON.stringify(values));
+        // if (props.updateCard) {
+        //     props.updateCard(props.boardId, values.id, values, weight);
+        // }
     }, [values, weight]);
 
 
@@ -387,7 +391,7 @@ function CardInfo(props) {
                             </thead>
 
                             <tbody>
-                            {values.tasks?.map((item) => (
+                            {values.subTasks?.map((item) => (
                                 <tr key={item.id} className={"subtask_card"}>
 
                                     <td >
@@ -395,7 +399,7 @@ function CardInfo(props) {
                                             type="text"
                                             value={item.subTitle}
                                             onChange={(event) =>
-                                                updateTask(item.id, "text", event.target.value)
+                                                updateSubTask(item.id, "text", event.target.value)
                                             }
                                             style={{ width: 'fit-content' }}
                                         />
@@ -404,7 +408,7 @@ function CardInfo(props) {
                                         <textarea
                                             value={item.subDescription}
                                             onChange={(event) =>
-                                                updateTask(item.id, "description", event.target.value)
+                                                updateSubTask(item.id, "description", event.target.value)
                                             }
                                             style={{ width: 'fit-content' }}
                                         />
@@ -415,7 +419,7 @@ function CardInfo(props) {
                                                 type="date"
                                                 value={item.subPlannedStartDate || ""}
                                                 onChange={(event) =>
-                                                    updateTask(item.id, "plannedStartDate", event.target.value)
+                                                    updateSubTask(item.id, "subPlannedStartDate", event.target.value)
                                                 }
 
                                             />
@@ -427,7 +431,7 @@ function CardInfo(props) {
                                                 type="date"
                                                 value={item.subPlannedEndDate || ""}
                                                 onChange={(event) =>
-                                                    updateTask(item.id, "plannedEndDate", event.target.value)
+                                                    updateSubTask(item.id, "subPlannedEndDate", event.target.value)
                                                 }
                                             />
                                         </div>
@@ -438,7 +442,7 @@ function CardInfo(props) {
                                                 type="date"
                                                 value={item.subActualStartDate || ""}
                                                 onChange={(event) =>
-                                                    updateTask(item.id, "actualStartDate", event.target.value)
+                                                    updateSubTask(item.id, "subActualStartDate", event.target.value)
                                                 }
                                             />
                                         </div>
@@ -449,7 +453,7 @@ function CardInfo(props) {
                                                 type="date"
                                                 value={item.subActualEndDate || ""}
                                                 onChange={(event) =>
-                                                    updateTask(item.id, "actualEndDate", event.target.value)
+                                                    updateSubTask(item.id, "subActualEndDate", event.target.value)
                                                 }
                                             />
                                         </div>
@@ -458,7 +462,7 @@ function CardInfo(props) {
                                         <select
                                             value={item.subStatus || ""}
                                             onChange={(event) =>
-                                                updateTask(item.id, "status", event.target.value)
+                                                updateSubTask(item.id, "subStatus", event.target.value)
                                             }
                                             style={{ width: 'fit-content' }}
                                         >
@@ -471,7 +475,7 @@ function CardInfo(props) {
                                         <textarea
                                             value={item.subRemark}
                                             onChange={(event) =>
-                                                updateTask(item.id, "remark", event.target.value)
+                                                updateSubTask(item.id, "remark", event.target.value)
                                             }
                                             style={{ width: 'fit-content' }}
                                         />
@@ -480,7 +484,7 @@ function CardInfo(props) {
                                         <textarea
                                             value={item.subMembersAssigned}
                                             onChange={(event) =>
-                                                updateTask(item.id, "membersAssigned", event.target.value)
+                                                updateSubTask(item.id, "membersAssigned", event.target.value)
                                             }
                                             style={{ width: 'fit-content' }}
                                         />
@@ -493,7 +497,7 @@ function CardInfo(props) {
                             </tbody>
                         </table>
 
-                        <button className="addTask" onClick={() => addTask("New Task")}>Add sub task</button>
+                        <button className="addTask" onClick={() => addSubTask("New Task")}>Add sub task</button>
                     </div>
                 </div>
 

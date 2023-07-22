@@ -5,36 +5,31 @@ import Cost from "../Cost/Cost.js";
 import Chart_calc from "../Progress/Chart_calc.js";
 import Work_D_Chart from "../Work_D_Chart/Work_D_Chart.js";
 
-const Leftside = ({cards, budget, progress}) => {
+const Leftside = ({incurredCost, budget, progress}) => {
 
-
-    const sumOfResults = cards.reduce(
-        (total, card) => total + parseInt(card.result),
-        0
-    );
-    const [completed, setCompleted] = useState(progress.completed);
-    const [incompleted, setIncompleted] = useState(progress.incompleted);
-
-
+    // const [completed, setCompleted] = useState(progress.completed);
+    // const [incompleted, setIncompleted] = useState(progress.incompleted);
+    const remainProgress = 100 - (progress.incompleted + progress.completed);
+    const remainWorkDChart = 100 - (progress.todoWeight + progress.progressWeight + progress.finishWeight);
     return (
 
     <div>
             <div>
                 <div className="title">Progress</div>
                 <div className="C_body">
-                    <Progress sumOfResults={sumOfResults} incompleted={progress.incompleted} completed={progress.completed}/>
+                    <Progress remain={remainProgress} incompleted={progress.incompleted} completed={progress.completed}/>
                 </div>
             </div>
         <div>
             <div className="title">Work distribution</div>
             <div className="C_body">
-                <Work_D_Chart />
+                <Work_D_Chart remain={remainWorkDChart} todoWeight={progress.todoWeight} progressWeight={progress.progressWeight} finishWeight={progress.finishWeight}/>
             </div>
         </div>
             <div>
                 <div className="title">Finance</div>
                 <div className="C_body">
-                    <Cost budget={budget}  />
+                    <Cost incurredCost={incurredCost} budget={budget}  />
                 </div>
             </div>
         </div>

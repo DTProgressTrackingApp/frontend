@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Clock, MoreHorizontal } from "react-feather";
+import React, {useState} from "react";
+import {Clock, MoreHorizontal} from "react-feather";
 
 import Dropdown from "../Dropdown/Dropdown.js";
 import CardInfo from "./CardInfo/CardInfo.js";
@@ -9,8 +9,10 @@ import "./Card.css";
 function Card(props) {
     const [showDropdown, setShowDropdown] = useState(false);
     const [showModal, setShowModal] = useState(false);
+    const [reload, setReload] = useState(false);
+    const [card, setCard] = useState(props.card);
 
-    const { id, title, startDate, tasks, kpi, kpiDesc,  taskBudget, cic, weight,achievedWeight, endDate, actualStartDate,actualEndDate } = props.card;
+    const { id, title, startDate, subTasks, kpi, kpiDesc,  taskBudget, cic, weight,achievedWeight, endDate, actualStartDate,actualEndDate } = card;
 
     const formatDate = (value) => {
         if (!value) return "";
@@ -22,16 +24,23 @@ function Card(props) {
         return `${day} ${month}`;
     };
 
+    const updateCard = (card) => {
+        console.log("UpdateCard@Card.js: " + JSON.stringify(card));
+        props.updateCard(card);
+        setCard(card);
+    }
+
 
     return (
         <>
             {showModal && (
                 <CardInfo
-                    onClose={() => setShowModal(false)}
+                    onClose={() => {
+                        setShowModal(false);
+                        setReload(true);
+                    }}
                     card={props.card}
-                    cardId={props.cardId}
-                    boardId={props.boardId}
-                    updateCard={props.updateCard}
+                    updateCard={(card) => updateCard(card)}
                 />
             )}
             <div
@@ -56,7 +65,7 @@ function Card(props) {
                                 class="board_dropdown"
                                 onClose={() => setShowDropdown(false)}
                             >
-                                <p onClick={() => props.removeCard(props.boardId, id)}>
+                                <p onClick={() => props.removeCard(id)}>
                                     Delete Card
                                 </p>
                             </Dropdown>
@@ -134,12 +143,11 @@ function Card(props) {
                     </div>
 
 
-
-                    {tasks && tasks.length > 0 && (
+                    {subTasks && subTasks.length > 0 && (
                         <div style={{ display: "flex", alignItems: "center", marginTop: "5px", fontSize: '12px', fontWeight: 'bold' }}>
                             <span style={{ marginRight: "4px" }}>Sub tasks:</span>
                             <p className="card_footer_item" style={{ fontSize: '10px', background:'none'}} >
-                                {tasks.length}
+                                {subTasks.length}
                             </p>
                         </div>
                     )}
@@ -150,5 +158,4 @@ function Card(props) {
         </>
     );
 }
-
 export default Card;

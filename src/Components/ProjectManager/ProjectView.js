@@ -3,6 +3,7 @@ import LandingPage from "../../Landing_Page.js";
 import React, {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {authToken} from "../../Service/AuthService.js";
+import {all} from "axios";
 
 export const ProjectView = () => {
     const location = useLocation();
@@ -36,10 +37,14 @@ export const ProjectView = () => {
         const newSubProject = {
             id: subProjects.length + 1,
             title: subProjectData.title, // Store the sub project title
-            cards: subProjectData.cards,
+            todoTask: subProjectData.todoTask,
+            progressTask: subProjectData.progressTask,
+            finishTask: subProjectData.finishTask,
             members: subProjectData.members
         };
+        console.log("newSubProject: " + JSON.stringify(newSubProject));
         const allProjects = [...subProjects, newSubProject];
+        console.log("allProjects: " + JSON.stringify(allProjects));
         localStorage.setItem("prac-kanban", JSON.stringify(allProjects));
         setSubProjects(allProjects);
     };

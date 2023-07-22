@@ -19,7 +19,9 @@ const LandingPage = ({ onSubProjectClick, subProjects, onSubProjectButtonClick, 
             const subProject = {
                 id: subProjects.length + 1,
                 title: subProjectData,
-                cards: [],
+                todoTask: [],
+                progressTask: [],
+                finishTask: [],
                 members: []
             };
             console.log("handleSubProjectClick@subProject: " + JSON.stringify(subProject));
@@ -48,10 +50,10 @@ const LandingPage = ({ onSubProjectClick, subProjects, onSubProjectButtonClick, 
                             currentUser.role == "MANAGER" &&
                                 [
                                     <input type="text" value={subProjectData}
-                                       onChange={handleSubProjectDataChange}
+                                       onChange={(e) => handleSubProjectDataChange(e)}
                                        placeholder="Enter project title"
                                        className="sub-project-title-input" />,
-                                    <button className="add-project-button" onClick={handleSubProjectClick} disabled={!isTitleEntered}>
+                                    <button className="add-project-button" onClick={() => handleSubProjectClick()} disabled={!isTitleEntered}>
                                         Create project
                                     </button>
                                 ]

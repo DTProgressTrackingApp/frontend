@@ -2,25 +2,18 @@ import React, { useEffect, useState } from "react";
 import "./Project_title.css";
 import {setBatch} from "react-redux/es/utils/batch.js";
 
-function Project_title(props) {
-    let setBudget = props.setBudget;
-    let budget = props.budget;
+function Project_title({budget, setBudget}) {
     console.log("budget here:", budget);
-    console.log(props.setBudget)
 
-    const [values, setValues] = useState({
-        ...props.card,
-        budget: 0,
-        budgetUnit: "lkr", // Default budget unit
-    });
-
-    useEffect(() => {
-        // Get values from local storage if available
+    const [values, setValues] = useState(() => {
         const storedValues = localStorage.getItem("projectValues");
+        console.log("Project value: " + JSON.stringify(storedValues));
         if (storedValues) {
-            setValues(JSON.parse(storedValues));
+            return JSON.parse(storedValues);
+        } else {
+            return [];
         }
-    }, []);
+    });
 
     useEffect(() => {
         // Save values to local storage whenever they change
@@ -30,10 +23,7 @@ function Project_title(props) {
 
     const handleBudgetChange = (e) => {
         setBudget(e.target.value);
-    };
-
-    const handleBudgetUnitChange = (e) => {
-        setValues({ ...values, budgetUnit: e.target.value });
+        setValues({ ...values, budget: e.target.value });
     };
 
     return (

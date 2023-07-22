@@ -1,26 +1,17 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 // import Work_D_Chart from "./Components/Work_D_Chart/Work_D_Chart.js";
 import Board from "./Components/Board/Board.js";
-import { getBoardWeightSum } from "./Components/Work_D_Chart/helpers.js";
 
 import "./KanbanApp.css";
-import Editable from "./Components/Editabled/Editable.js";
 import {authToken} from "./Service/AuthService.js";
 import {useNavigate} from "react-router-dom";
 
-function KanbanApp() {
+function KanbanApp({currentProject, setProject}) {
   const navigate = useNavigate();
-  const [boards, setBoards] = useState(() => {
-    return JSON.parse(localStorage.getItem("prac-kanban")) || []
-  });
-  // const [incompleted, setIncompleted] = useState(0);
-  // const [completed, setCompleted] = useState(0)
-  //
-  // if(boards.length > 1)
-  //   setIncompleted(boards[0].length + boards[1].length)
-  //
-  // if(boards.length > 2)
-  //   setCompleted(boards[2])
+  const [weight, setWeight] = useState("");
+  const [todoTask, setTodoTask] = useState(() => currentProject.todoTask);
+  const [progressTask, setProgressTask] = useState(() => currentProject.progressTask);
+  const [finishTask, setFinishTask] = useState(() => currentProject.finishTask);
 
   useEffect(() => {
     // only runs once
@@ -30,107 +21,216 @@ function KanbanApp() {
     }
   }, []);
 
-  const addCardHandler = (id, title) => {
-    console.log("addCardHandle: " + id + ", title: " + title);
-    const index = boards.findIndex((item) => item.id === id);
-    if (index < 0) return;
-
-    const tempBoards = [...boards];
-    tempBoards[index].cards.push({
+  const addCardTodoTask = (title) => {
+    console.log("add todo task, title: " + title);
+    todoTask.push({
       id: Date.now() + Math.random() * 2,
       title,
       labels: [],
       date: "",
       tasks: [],
-    });
-    setBoards(tempBoards);
+    })
+    const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
+    const findProject = saveProject.find(p => p.id == currentProject.id);
+    if (findProject) {
+      findProject.todoTask = [];
+      findProject.todoTask = todoTask;
+      localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
+    }
+    console.log("TodoTask@size: " + todoTask.length);
+    setTodoTask(todoTask);
   };
 
-  const removeCard = (bid, cid) => {
-    const index = boards.findIndex((item) => item.id === bid);
-    if (index < 0) return;
-
-    const tempBoards = [...boards];
-    const cards = tempBoards[index].cards;
-
-    const cardIndex = cards.findIndex((item) => item.id === cid);
-    if (cardIndex < 0) return;
-
-    cards.splice(cardIndex, 1);
-    setBoards(tempBoards);
+  const addCardProgressTask = (title) => {
+    console.log("add progress task, title: " + title);
+    progressTask.push({
+      id: Date.now() + Math.random() * 2,
+      title,
+      labels: [],
+      date: "",
+      subTasks: [],
+    })
+    const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
+    const findProject = saveProject.find(p => p.id == currentProject.id);
+    if (findProject) {
+      findProject.progressTask = [];
+      findProject.progressTask = progressTask;
+      localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
+    }
+    console.log("progressTask@size: " + todoTask.length);
+    setProgressTask(progressTask);
   };
 
-  const updateCard = (bid, cid, card) => {
-    const index = boards.findIndex((item) => item.id === bid);
-    if (index < 0) return;
+  const addCardFinishTask = (title) => {
+    console.log("add finish task, title: " + title);
+    finishTask.push({
+      id: Date.now() + Math.random() * 2,
+      title,
+      labels: [],
+      date: "",
+      subTasks: [],
+    })
+    const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
+    const findProject = saveProject.find(p => p.id == currentProject.id);
+    if (findProject) {
+      findProject.finishTask = [];
+      findProject.finishTask = finishTask;
+      localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
+    }
+    console.log("finishTask@size: " + todoTask.length);
+    setFinishTask(finishTask);
 
-    const tempBoards = [...boards];
-    const cards = tempBoards[index].cards;
-
-    const cardIndex = cards.findIndex((item) => item.id === cid);
-    if (cardIndex < 0) return;
-
-    tempBoards[index].cards[cardIndex] = card;
-
-    setBoards(tempBoards);
   };
 
-  const [weight, setWeight] = useState("");
+  const updateCardTodoTask = (updateTask) => {
+    console.log("update todo task, updateTask: " + JSON.stringify(updateTask));
+    for (let i = 0; i < todoTask.length; i++) {
+      if (todoTask[i].id == updateTask.id) {
+        todoTask[i] = updateTask;
+        break;
+      }
+    }
+    console.log("todoTask: " + JSON.stringify(todoTask));
+    const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
+    const findProject = saveProject.find(p => p.id == currentProject.id);
+    if (findProject) {
+      findProject.todoTask = [];
+      findProject.todoTask = todoTask;
+      localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
+    }
+    console.log("TodoTask@size: " + todoTask.length);
+    setTodoTask(todoTask);
+    setProject(findProject);
+  };
+
+  const updateCardProgressTask = (updateTask) => {
+    console.log("update progress task, updateTask: " + JSON.stringify(updateTask));
+    for (let i = 0; i < progressTask.length; i++) {
+      if (progressTask[i].id == updateTask.id) {
+        progressTask[i] = updateTask;
+        break;
+      }
+    }
+    console.log("progressTask: " + JSON.stringify(progressTask));
+    const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
+    const findProject = saveProject.find(p => p.id == currentProject.id);
+    if (findProject) {
+      findProject.progressTask = [];
+      findProject.progressTask = progressTask;
+      localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
+    }
+    console.log("progressTask@size: " + progressTask.length);
+    setTodoTask(progressTask);
+    setProject(findProject);
+  };
+
+  const updateCardFinishTask = (updateTask) => {
+    console.log("update finish task, updateTask: " + JSON.stringify(updateTask));
+    for (let i = 0; i < finishTask.length; i++) {
+      if (finishTask[i].id == updateTask.id) {
+        finishTask[i] = updateTask;
+        break;
+      }
+    }
+    console.log("finishTask: " + JSON.stringify(finishTask));
+    const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
+    const findProject = saveProject.find(p => p.id == currentProject.id);
+    if (findProject) {
+      findProject.finishTask = [];
+      findProject.finishTask = finishTask;
+      localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
+    }
+    console.log("finishTask@size: " + finishTask.length);
+    setTodoTask(finishTask);
+    setProject(findProject);
+  };
+
+  const removeCardTodoTask = (taskId) => {
+    console.log("remove todo task, taskId: " + taskId);
+    const removeTodoTask = todoTask.filter(t => t.id != taskId);
+    console.log("TodoTask: " + JSON.stringify(removeTodoTask));
+    const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
+    const findProject = saveProject.find(p => p.id == currentProject.id);
+    if (findProject) {
+      findProject.todoTask = [];
+      findProject.todoTask = removeTodoTask;
+      localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
+    }
+    console.log("removeTodoTask@size: " + todoTask.length);
+    setTodoTask(removeTodoTask);
+    setProject(findProject);
+  };
+
+  const removeCardProgressTask = (taskId) => {
+    console.log("remove progress task, taskId: " + taskId);
+    const removeProgressTask = progressTask.filter(t => t.id != taskId);
+    console.log("ProgressTask: " + JSON.stringify(removeProgressTask));
+
+    const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
+    const findProject = saveProject.find(p => p.id == currentProject.id);
+    if (findProject) {
+      findProject.progressTask = [];
+      findProject.progressTask = removeProgressTask;
+      localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
+    }
+    console.log("removeProgressTask@size: " + progressTask.length);
+    setProgressTask(removeProgressTask);
+    setProject(findProject);
+  };
+
+  const removeCardFinishTask = (taskId) => {
+    console.log("remove finish task, taskId: " + taskId);
+    const removeFinishTask = finishTask.filter(t => t.id != taskId);
+    console.log("FinishTask: " + JSON.stringify(removeFinishTask));
+
+    const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
+    const findProject = saveProject.find(p => p.id == currentProject.id);
+    if (findProject) {
+      findProject.finishTask = [];
+      findProject.finishTask = removeFinishTask;
+      localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
+    }
+    console.log("removeFinishTask@size: " + finishTask.length);
+    setFinishTask(removeFinishTask);
+    setProject(findProject);
+  };
 
   const updateWeight = (value) => {
     setWeight(value);
   };
-
-  const getBoardWeightSum = (board) => {
-    let sum = 0;
-    for (const card of board.cards) {
-      sum += parseInt(card.weight) || 0;
-    }
-    return sum;
-  };
-
-  const boardWeights = boards.map((board) => ({
-    id: board.id,
-    weightSum: getBoardWeightSum(board),
-  }));
-
-
-  useEffect(() => {
-    localStorage.setItem("prac-kanban", JSON.stringify(boards));
-  }, [boards]);
 
   return (
       <div className="kapp">
         <div className="app_boards_container">
           <div className="app_boards">
             <Board
-                key={boards[0]?.id}
-                board={boards[0]}
-                addCard={addCardHandler}
-                removeCard={removeCard}
-                updateCard={updateCard}
+                // key={project.todoTask?.id}
+                task={todoTask}
+                addCard={addCardTodoTask}
+                updateCard={updateCardTodoTask}
+                removeCard={removeCardTodoTask}
                 weight={weight}
                 updateWeight={updateWeight}
             >
               <h2>To-do</h2>
             </Board>
             <Board
-                key={boards[1]?.id}
-                board={boards[1]}
-                addCard={addCardHandler}
-                removeCard={removeCard}
-                updateCard={updateCard}
+                // key={project.todoTask?.id}
+                task={progressTask}
+                addCard={addCardProgressTask}
+                updateCard={updateCardProgressTask}
+                removeCard={removeCardProgressTask}
                 weight={weight}
                 updateWeight={updateWeight}
             >
-              <h2>In progress</h2>
+                <h2>In progress</h2>
             </Board>
             <Board
-                key={boards[2]?.id}
-                board={boards[2]}
-                addCard={addCardHandler}
-                removeCard={removeCard}
-                updateCard={updateCard}
+                // key={project.todoTask?.id}
+                task={finishTask}
+                addCard={addCardFinishTask}
+                updateCard={updateCardFinishTask}
+                removeCard={removeCardFinishTask}
                 weight={weight}
                 updateWeight={updateWeight}
             >
