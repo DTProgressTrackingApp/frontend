@@ -3,6 +3,7 @@ import "./AssignMemberModal.css";
 import { useForm } from "react-hook-form";
 import {authToken} from "../../Service/AuthService.js";
 import {useNavigate} from "react-router-dom";
+import {addKanpanProject, getKanbanProject} from "../../Service/FirestoreService.js";
 
 export const AssignMemberModal = ({project, setIsOpen}) => {
     const {clearErrors, register, setError, formState: { errors } } = useForm();
@@ -17,13 +18,15 @@ export const AssignMemberModal = ({project, setIsOpen}) => {
         }
     }, []);
 
-    const removeEmailMember = (e) => {
+    const removeEmailMember = async (e) => {
         e.preventDefault();
 
         const memberEmail = e.target.getAttribute("data-removeemail");
         const otherMembers = project.members.filter(e => e !== memberEmail);
 
-        let allCurrentProj = JSON.parse(localStorage.getItem("prac-kanban"));
+        // let allCurrentProj = JSON.parse(localStorage.getItem("prac-kanban"));
+        const allCurrentProj = await getKanbanProject();
+
         const index = allCurrentProj.findIndex((obj => obj.id == project.id));
 
         allCurrentProj[index].members = [];
@@ -32,18 +35,19 @@ export const AssignMemberModal = ({project, setIsOpen}) => {
             project.members.push(m);
             allCurrentProj[index].members.push(m);
         })
-
-        localStorage.setItem("prac-kanban", JSON.stringify(allCurrentProj));
+        await addKanpanProject(allCurrentProj);
+        // localStorage.setItem("prac-kanban", JSON.stringify(allCurrentProj));
         setReload(true);
         clearErrors("email")
     }
 
-    const addEmailMember = (e) => {
+    const addEmailMember = async (e) => {
         e.preventDefault();
 
         const inputEmail = document.getElementById('addEmail');
         const email = inputEmail.value;
-        let allCurrentProj = JSON.parse(localStorage.getItem("prac-kanban"));
+        // let allCurrentProj = JSON.parse(localStorage.getItem("prac-kanban"));
+        const allCurrentProj = await getKanbanProject();
         if (allCurrentProj.find(c => {
             if (c.members.includes(email)) {
                 return true;
@@ -63,7 +67,8 @@ export const AssignMemberModal = ({project, setIsOpen}) => {
             navigate("/") // Redirect to login page
             return;
         }
-        localStorage.setItem("prac-kanban", JSON.stringify(allCurrentProj));
+        await addKanpanProject(allCurrentProj);
+        // localStorage.setItem("prac-kanban", JSON.stringify(allCurrentProj));
         setReload(true);
         clearErrors("email")
     }

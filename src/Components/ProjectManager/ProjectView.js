@@ -3,7 +3,7 @@ import LandingPage from "../../Landing_Page.js";
 import React, {useEffect, useState} from "react";
 import {useLocation, useNavigate} from "react-router-dom";
 import {authToken} from "../../Service/AuthService.js";
-import {all} from "axios";
+import {addKanpanProject, getKanbanProject} from "../../Service/FirestoreService.js";
 
 export const ProjectView = () => {
     const location = useLocation();
@@ -12,28 +12,44 @@ export const ProjectView = () => {
 
     useEffect(() => {
         // only runs once
+        // getKanbanProject();
         console.log('Run auth token once');
         if (!authToken()) {
             navigate("/") // Redirect to login page
         }
     }, []);
 
-    const [subProjects, setSubProjects] = useState(() => {
-        let allCurrentProjects = JSON.parse(localStorage.getItem("prac-kanban"));
-        if (!allCurrentProjects) {
-            return [];
+    const [subProjects, setSubProjects] = useState( []);
+
+    useEffect(  () => {
+        const fetchData = async () => {
+            const data = await getKanbanProject();
+            return data;
         }
-        if (user.role == 'MANAGER') {
-            return allCurrentProjects;
-        }
-        allCurrentProjects = allCurrentProjects.filter(item => {
-            return item.members.includes(user.email);
-        })
-        return allCurrentProjects;
-    });
+
+        let allCurrentProjects;
+         fetchData().then(data => {
+             allCurrentProjects = data;
+             console.log("Init allCurrentProjects " + JSON.stringify(allCurrentProjects));
+             if (!allCurrentProjects) {
+                 setSubProjects([]);
+                 return [];
+             }
+             if (user.role == 'MANAGER') {
+                 setSubProjects(allCurrentProjects);
+                 return;
+             }
+             allCurrentProjects = allCurrentProjects.filter(item => {
+                 return item.members.includes(user.email);
+             })
+             setSubProjects(allCurrentProjects);
+         }
+        );
+    }, [])
+
     const [activeSubProject, setActiveSubProject] = useState(null);
 
-    const handleSubProjectClick = (subProjectData) => {
+    const handleSubProjectClick = async (subProjectData) => {
         const newSubProject = {
             id: subProjects.length + 1,
             title: subProjectData.title, // Store the sub project title
@@ -45,7 +61,7 @@ export const ProjectView = () => {
         console.log("newSubProject: " + JSON.stringify(newSubProject));
         const allProjects = [...subProjects, newSubProject];
         console.log("allProjects: " + JSON.stringify(allProjects));
-        localStorage.setItem("prac-kanban", JSON.stringify(allProjects));
+        await addKanpanProject(allProjects);
         setSubProjects(allProjects);
     };
 

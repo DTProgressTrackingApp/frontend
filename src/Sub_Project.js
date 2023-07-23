@@ -5,19 +5,29 @@ import Leftside from './Components/Leftside/Leftside.js';
 import Project_title from './Components/Project_title.js';
 import {AssignMemberModal} from "./Components/Modal/AssignMemberModal.js";
 import {Logout} from "./Components/Auth/Logout.js";
+import {getProjectValues} from "./Service/FirestoreService.js";
 
 function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
     const [isOpen, setIsOpen] = useState(false);
     const [cards, setCards] = useState([]);
-    const [budget, setBudget] = useState(() => {
-        const storedValues = localStorage.getItem("projectValues");
-        if (storedValues) {
-            const value = JSON.parse(storedValues);
-            return value.budget;
-        } else {
-            return 0;
+    const [budget, setBudget] = useState(0);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getProjectValues();
+            return data;
         }
-    });
+        fetchData().then(data => {
+                console.log("Project value: " + JSON.stringify(data));
+                if (data) {
+                    setBudget(data.budget);
+                } else {
+                    setBudget(0);
+                }
+            }
+        );
+    }, [])
+
     const [completed, setCompleted] = useState(0);
     const [incompleted, setIncompleted] = useState(0);
     const [todoWeight, setTodoWeight] = useState(0);

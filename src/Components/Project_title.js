@@ -1,23 +1,33 @@
 import React, { useEffect, useState } from "react";
 import "./Project_title.css";
 import {setBatch} from "react-redux/es/utils/batch.js";
+import {addProjectInfo, getKanbanProject, getProjectValues} from "../Service/FirestoreService.js";
 
 function Project_title({budget, setBudget}) {
     console.log("budget here:", budget);
 
-    const [values, setValues] = useState(() => {
-        const storedValues = localStorage.getItem("projectValues");
-        console.log("Project value: " + JSON.stringify(storedValues));
-        if (storedValues) {
-            return JSON.parse(storedValues);
-        } else {
-            return [];
+    const [values, setValues] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const data = await getProjectValues();
+            return data;
         }
-    });
+        fetchData().then(data => {
+                console.log("Project value: " + JSON.stringify(data));
+                if (data) {
+                    setValues(data);
+                } else {
+                    setValues([]);
+                }
+            }
+        );
+    }, [])
 
     useEffect(() => {
         // Save values to local storage whenever they change
-        localStorage.setItem("projectValues", JSON.stringify(values));
+        // localStorage.setItem("projectValues", JSON.stringify(values));
+        addProjectInfo(values);
     }, [values]);
 
 
