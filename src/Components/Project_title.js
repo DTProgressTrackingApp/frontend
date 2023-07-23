@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Project_title.css";
 import {setBatch} from "react-redux/es/utils/batch.js";
 import {addProjectInfo, getKanbanProject, getProjectValues} from "../Service/FirestoreService.js";
+import {set} from "react-hook-form";
 
 function Project_title({budget, setBudget}) {
     console.log("budget here:", budget);
@@ -14,20 +15,27 @@ function Project_title({budget, setBudget}) {
             return data;
         }
         fetchData().then(data => {
-                console.log("Project value: " + JSON.stringify(data));
-                if (data) {
-                    setValues(data);
-                } else {
-                    setValues([]);
-                }
+            if (data) {
+                setValues(data);
+            } else {
+                setValues([]);
             }
-        );
-    }, [])
+        })
+    }, []);
 
     useEffect(() => {
         // Save values to local storage whenever they change
         // localStorage.setItem("projectValues", JSON.stringify(values));
-        addProjectInfo(values);
+        console.log("Values Project: " + JSON.stringify(values) + ", length: " + Object.keys(values).length);
+        if (values && Object.keys(values).length !== 0) {
+            const fetchData = async () => {
+                await addProjectInfo(values);
+            }
+            fetchData().then(() => {
+                    console.log("Add project info successfully");
+                }
+            );
+        }
     }, [values]);
 
 

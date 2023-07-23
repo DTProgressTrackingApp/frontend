@@ -24,14 +24,13 @@ function Card(props) {
         return `${day} ${month}`;
     };
 
-    const updateCard = (card) => {
-        console.log("UpdateCard@Card.js: " + JSON.stringify(card));
-        props.updateCard(card);
+    const updateCard = async (card) => {
+        await props.updateCard(card);
         setCard(card);
     }
 
-    const shiftSubTaskStatus = (task, output) => {
-        props.shiftSubTaskStatus(task, output);
+    const shiftSubTaskStatus = async (task, output) => {
+        await props.shiftSubTaskStatus(task, output);
         setCard(task);
     }
 

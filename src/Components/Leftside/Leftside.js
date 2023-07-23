@@ -5,7 +5,7 @@ import Cost from "../Cost/Cost.js";
 import Chart_calc from "../Progress/Chart_calc.js";
 import Work_D_Chart from "../Work_D_Chart/Work_D_Chart.js";
 
-const Leftside = ({incurredCost, budget, progress}) => {
+const Leftside = ({incurredCost, taskBudget, budget, progress}) => {
 
     // const [completed, setCompleted] = useState(progress.completed);
     // const [incompleted, setIncompleted] = useState(progress.incompleted);
@@ -29,7 +29,7 @@ const Leftside = ({incurredCost, budget, progress}) => {
             <div>
                 <div className="title">Finance</div>
                 <div className="C_body">
-                    <Cost incurredCost={incurredCost} budget={budget}  />
+                    <Cost incurredCost={incurredCost} taskBudget={taskBudget} budget={budget}  />
                 </div>
             </div>
         </div>

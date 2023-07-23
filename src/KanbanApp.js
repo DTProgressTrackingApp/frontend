@@ -8,13 +8,9 @@ import {useNavigate} from "react-router-dom";
 import {addKanpanProject, getKanbanProject, getProjectValues} from "./Service/FirestoreService.js";
 
 function KanbanApp({currentProject, setProject}) {
+  const [currentPrj, setCurrentPrj] = useState(currentProject);
   const navigate = useNavigate();
   const [totalWeight, setTotalWeight] = useState(() => {
-    // const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
-    // const findProject = saveProject.find(p => p.id == currentProject.id);
-    // if (!findProject) {
-    //   return 0;
-    // }
     let tmpTotalWeight = 0;
     console.log("Current project: " + JSON.stringify(currentProject));
     if (currentProject.todoTask) {
@@ -53,7 +49,7 @@ function KanbanApp({currentProject, setProject}) {
     }
   }, []);
 
-  const addCardTodoTask = async (title) => {
+  const addCardTodoTask = async(title) => {
     console.log("add todo task, title: " + title);
     todoTask.push({
       id: Date.now() + Math.random() * 2,
@@ -62,30 +58,17 @@ function KanbanApp({currentProject, setProject}) {
       date: "",
       subTasks: [],
     })
-    // const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
-    const saveProject = await getKanbanProject();
-    const findProject = saveProject.find(p => p.id === currentProject.id);
-    if (findProject) {
-      findProject.todoTask = [];
-      findProject.todoTask = todoTask;
+      const saveProject = await getKanbanProject();
+      const findProject = saveProject.find(p => p.id === currentProject.id);
+      if (findProject) {
+        findProject.todoTask = [];
+        findProject.todoTask = todoTask;
+      }
+      console.log("TodoTask@size: " + todoTask.length);
+      setTodoTask(todoTask);
+      setProject(findProject);
+      setCurrentPrj(findProject);
       await addKanpanProject(saveProject);
-    }
-    console.log("TodoTask@size: " + todoTask.length);
-    setTodoTask(todoTask);
-    // const fetchData = async () => {
-    //   const data = await getKanbanProject();
-    //   return data;
-    // }
-    // fetchData().then(data => {
-    //   const findProject = data.find(p => p.id === currentProject.id);
-    //   if (findProject) {
-    //     findProject.todoTask = [];
-    //     findProject.todoTask = todoTask;
-    //     addKanpanProject(data);
-    //   }
-    //   console.log("TodoTask@size: " + todoTask.length);
-    //   setTodoTask(todoTask);
-    // })
   };
 
   const addCardProgressTask = async (title) => {
@@ -108,6 +91,8 @@ function KanbanApp({currentProject, setProject}) {
     }
     console.log("progressTask@size: " + todoTask.length);
     setProgressTask(progressTask);
+    setCurrentPrj(findProject);
+    setProject(findProject);
   };
 
   const addCardFinishTask = async (title) => {
@@ -126,11 +111,11 @@ function KanbanApp({currentProject, setProject}) {
       findProject.finishTask = [];
       findProject.finishTask = finishTask;
       await addKanpanProject(saveProject);
-      // localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
     }
     console.log("finishTask@size: " + todoTask.length);
     setFinishTask(finishTask);
-
+    setCurrentPrj(findProject);
+    setProject(findProject);
   };
 
   const updateCardTodoTask = async (updateTask) => {
@@ -144,7 +129,6 @@ function KanbanApp({currentProject, setProject}) {
     console.log("todoTask: " + JSON.stringify(todoTask));
     // const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
     const saveProject = await getKanbanProject();
-    console.log("save project: " + JSON.stringify(saveProject));
     const findProject = saveProject.find(p => p.id == currentProject.id);
     if (findProject) {
       findProject.todoTask = [];
@@ -154,6 +138,7 @@ function KanbanApp({currentProject, setProject}) {
     }
     console.log("TodoTask@size: " + todoTask.length);
     setTodoTask(todoTask);
+    setCurrentPrj(findProject);
     setProject(findProject);
   };
 
@@ -177,7 +162,8 @@ function KanbanApp({currentProject, setProject}) {
       // localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
     }
     console.log("progressTask@size: " + progressTask.length);
-    setTodoTask(progressTask);
+    setProgressTask(progressTask);
+    setCurrentPrj(findProject);
     setProject(findProject);
   };
 
@@ -201,7 +187,8 @@ function KanbanApp({currentProject, setProject}) {
       // localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
     }
     console.log("finishTask@size: " + finishTask.length);
-    setTodoTask(finishTask);
+    setFinishTask(finishTask);
+    setCurrentPrj(findProject);
     setProject(findProject);
   };
 
@@ -221,6 +208,7 @@ function KanbanApp({currentProject, setProject}) {
     }
     console.log("removeTodoTask@size: " + todoTask.length);
     setTodoTask(removeTodoTask);
+    setCurrentPrj(findProject);
     setProject(findProject);
   };
 
@@ -241,6 +229,7 @@ function KanbanApp({currentProject, setProject}) {
     }
     console.log("removeProgressTask@size: " + progressTask.length);
     setProgressTask(removeProgressTask);
+    setCurrentPrj(findProject);
     setProject(findProject);
   };
 
@@ -261,6 +250,7 @@ function KanbanApp({currentProject, setProject}) {
     }
     console.log("removeFinishTask@size: " + finishTask.length);
     setFinishTask(removeFinishTask);
+    setCurrentPrj(findProject);
     setProject(findProject);
   };
 
@@ -271,9 +261,10 @@ function KanbanApp({currentProject, setProject}) {
   const shiftSubTaskStatus = async (task, output) => {
     console.log("shiftSubTaskStatus, taskId: " + task.id + ", output: " + output);
     // const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
-    const saveProject = await getKanbanProject();
 
+    const saveProject = await getKanbanProject();
     const findProject = saveProject.find(p => p.id === currentProject.id);
+    console.log("findProject: " + JSON.stringify(findProject));
     if (findProject) {
       console.log("Before todoTask@size: " + todoTask.length + ",progressTask@size: " + progressTask.length + ",finishTask@size: " + finishTask.length);
       if (findProject.todoTask.find(t => t.id === task.id)) {
@@ -332,9 +323,10 @@ function KanbanApp({currentProject, setProject}) {
       setTodoTask(findProject.todoTask);
       setProgressTask(findProject.progressTask);
       setFinishTask(findProject.finishTask);
-      console.log("After todoTask@size: " + todoTask.length + ",progressTask@size: " + progressTask.length + ",finishTask@size: " + finishTask.length);
       setProject(findProject);
-      await addKanpanProject(saveProject);
+      console.log("After todoTask@size: " + todoTask.length + ",progressTask@size: " + progressTask.length + ",finishTask@size: " + finishTask.length);
+      console.log("SaveProject shift: " + JSON.stringify(saveProject));
+      addKanpanProject(saveProject);
       // localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
     }
   }
@@ -344,7 +336,6 @@ function KanbanApp({currentProject, setProject}) {
         <div className="app_boards_container">
           <div className="app_boards">
             <Board
-                // key={project.todoTask?.id}
                 task={todoTask}
                 addCard={addCardTodoTask}
                 updateCard={updateCardTodoTask}

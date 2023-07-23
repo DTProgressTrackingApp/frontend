@@ -297,10 +297,11 @@ function CardInfo(props) {
 
     const updateSubValues = async (subTask) => {
         alert("Save subtask successfully");
-        props.updateCard(values);
+        await props.updateCard(values);
+        console.log("Update card successfully!");
         const subTaskTodo = values.subTasks.find(t => t.id == subTask.id);
-        console.log("Before shift, sub task status: " + subTaskTodo.subStatus);
-        props.shiftSubTaskStatus(values, subTaskTodo.subStatus);
+        console.log("Before shift, sub task status: " + subTaskTodo.status);
+        props.shiftSubTaskStatus(values, subTaskTodo.status);
         // const subTaskRef = doc(db, "taskInfo", subTaskId);
 
         // Update the document with the new values
@@ -584,7 +585,7 @@ function CardInfo(props) {
                                     <td >
                                         <input
                                             type="text"
-                                            value={item.subTitle}
+                                            value={item.text}
                                             onChange={(event) =>
                                                 updateSubTask(item.id, "text", event.target.value)
                                             }
@@ -593,7 +594,7 @@ function CardInfo(props) {
                                     </td>
                                     <td>
                                         <textarea
-                                            value={item.subDescription}
+                                            value={item.description}
                                             onChange={(event) =>
                                                 updateSubTask(item.id, "description", event.target.value)
                                             }
@@ -647,9 +648,9 @@ function CardInfo(props) {
                                     </td>
                                     <td>
                                         <select
-                                            value={item.subStatus || ""}
+                                            value={item.status || ""}
                                             onChange={(event) =>
-                                                updateSubTask(item.id, "subStatus", event.target.value)
+                                                updateSubTask(item.id, "status", event.target.value)
                                             }
                                             style={{ width: 'fit-content' }}
                                         >
@@ -660,7 +661,7 @@ function CardInfo(props) {
                                     </td>
                                     <td>
                                         <textarea
-                                            value={item.subRemark}
+                                            value={item.remark}
                                             onChange={(event) =>
                                                 updateSubTask(item.id, "remark", event.target.value)
                                             }
@@ -669,7 +670,7 @@ function CardInfo(props) {
                                     </td>
                                     <td>
                                         <textarea
-                                            value={item.subMembersAssigned}
+                                            value={item.membersAssigned}
                                             onChange={(event) =>
                                                 updateSubTask(item.id, "membersAssigned", event.target.value)
                                             }

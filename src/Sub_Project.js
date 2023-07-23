@@ -34,6 +34,8 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
     const [progressWeight, setProgressWeight] = useState(0);
     const [finishWeight, setFinishWeight] = useState(0);
     const [incurredCost, setIncurredCost] = useState(0);
+    const [taskBudget, setTaskBudget] = useState(0);
+
     const [project, setProject] = useState(subProject);
 
     useEffect(() => {
@@ -44,11 +46,15 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
         let progressWeightPercent = 0;
         let finishWeightPercent = 0;
         let incurredCostPercent = 0;
+        let taskBudgetCostPercent = 0;
 
         if (project.todoTask) {
             project.todoTask.forEach((card) => {
                 if (card.weight) {
                     todoWeightPercent += parseInt(card.weight);
+                }
+                if (card.taskBudget) {
+                    taskBudgetCostPercent += parseInt(card.taskBudget);
                 }
             })
         }
@@ -64,6 +70,9 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
                 if (card.cic) {
                     incurredCostPercent += parseInt(card.cic);
                 }
+                if (card.taskBudget) {
+                    taskBudgetCostPercent += parseInt(card.taskBudget);
+                }
             })
         }
         if (project.finishTask) {
@@ -77,6 +86,9 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
                 if (card.cic) {
                     incurredCostPercent += parseInt(card.cic);
                 }
+                if (card.taskBudget) {
+                    taskBudgetCostPercent += parseInt(card.taskBudget);
+                }
             })
         }
         setIncompleted(inCompletedPercent);
@@ -85,9 +97,10 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
         setProgressWeight(progressWeightPercent);
         setFinishWeight(finishWeightPercent);
         setIncurredCost(incurredCostPercent);
+        setTaskBudget(taskBudgetCostPercent);
 
         console.log("completed " + completedPercent + ",inCompleted: " + inCompletedPercent + ",todoWeight: " + todoWeightPercent
-            + ",progressWeight: " + progressWeightPercent + ",finishWeight: " + finishWeightPercent + ",incurredCost: " + incurredCostPercent);
+            + ",progressWeight: " + progressWeightPercent + ",finishWeight: " + finishWeightPercent + ",incurredCost: " + incurredCostPercent + ",taskBudget: " + taskBudget);
     }, [project])
 
     const handleBudgetChange = (b) => {
@@ -100,7 +113,7 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
                 <div className="column-container">
                     <h2 className="project_title">{subProject.id + ' ' + subProject.title}</h2>
                     <Project_title budget={budget} setBudget={handleBudgetChange} />
-                    <Leftside cards={cards} incurredCost={incurredCost} budget={budget} progress={{completed, incompleted, todoWeight, progressWeight, finishWeight}} />
+                    <Leftside cards={cards} incurredCost={incurredCost} taskBudget={taskBudget} budget={budget} progress={{completed, incompleted, todoWeight, progressWeight, finishWeight}} />
                 </div>
                 {
                     currentUser.role == "MANAGER" && <button className="assign_button" onClick={() => setIsOpen(true)}><span>Assign member</span></button>

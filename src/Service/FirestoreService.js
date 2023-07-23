@@ -11,7 +11,7 @@ export const addKanpanProject = async (data) => {
         console.log("Document written with ID: ", kanpanRef.id);
         await setDoc(kanpanRef, {
             'prac-kanban' : data
-        }, { capital: true }, { merge: true }).catch(e => {
+        }).catch(e => {
             console.log(e);
         });
     } catch (e) {
@@ -26,7 +26,7 @@ export const addProjectInfo = async (data) => {
         console.log("Document written with ID: ", kanpanRef.id);
         await setDoc(kanpanRef, {
             'projectValues' : data
-        }, { capital: true }, { merge: true }).catch(e => {
+        }).catch(e => {
             console.log(e);
         });
     } catch (e) {
