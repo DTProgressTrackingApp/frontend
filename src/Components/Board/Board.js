@@ -25,6 +25,8 @@ function Board(props) {
                         card={card}
                         updateCard={props.updateCard}
                         removeCard={props.removeCard}
+                        totalWeight={props.totalWeight}
+                        setTotalWeight={props.setTotalWeight}
                     />
                 ))}
                 <Editable

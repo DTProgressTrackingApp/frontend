@@ -41,6 +41,8 @@ function Card(props) {
                     }}
                     card={props.card}
                     updateCard={(card) => updateCard(card)}
+                    totalWeight={props.totalWeight}
+                    setTotalWeight={props.setTotalWeight}
                 />
             )}
             <div

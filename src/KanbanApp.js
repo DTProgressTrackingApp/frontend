@@ -8,7 +8,38 @@ import {useNavigate} from "react-router-dom";
 
 function KanbanApp({currentProject, setProject}) {
   const navigate = useNavigate();
-  const [weight, setWeight] = useState("");
+  const [totalWeight, setTotalWeight] = useState(() => {
+    // const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
+    // const findProject = saveProject.find(p => p.id == currentProject.id);
+    // if (!findProject) {
+    //   return 0;
+    // }
+    let tmpTotalWeight = 0;
+    console.log("Current project: " + JSON.stringify(currentProject));
+    if (currentProject.todoTask) {
+      currentProject.todoTask.forEach(task => {
+        if (task.weight) {
+          tmpTotalWeight += parseInt(task.weight);
+        }
+      })
+    }
+    if (currentProject.progressTask) {
+      currentProject.progressTask.forEach(task => {
+        if (task.weight) {
+          tmpTotalWeight += parseInt(task.weight);
+        }
+      })
+    }
+    if (currentProject.finishTask) {
+      currentProject.finishTask.forEach(task => {
+        if (task.weight) {
+          tmpTotalWeight += parseInt(task.weight);
+        }
+      })
+    }
+    console.log("Current total weight: " + tmpTotalWeight);
+    return tmpTotalWeight;
+  });
   const [todoTask, setTodoTask] = useState(() => currentProject.todoTask);
   const [progressTask, setProgressTask] = useState(() => currentProject.progressTask);
   const [finishTask, setFinishTask] = useState(() => currentProject.finishTask);
@@ -28,7 +59,7 @@ function KanbanApp({currentProject, setProject}) {
       title,
       labels: [],
       date: "",
-      tasks: [],
+      subTasks: [],
     })
     const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
     const findProject = saveProject.find(p => p.id == currentProject.id);
@@ -195,8 +226,8 @@ function KanbanApp({currentProject, setProject}) {
     setProject(findProject);
   };
 
-  const updateWeight = (value) => {
-    setWeight(value);
+  const updateTotalWeight = (value) => {
+    setTotalWeight(value);
   };
 
   return (
@@ -209,8 +240,8 @@ function KanbanApp({currentProject, setProject}) {
                 addCard={addCardTodoTask}
                 updateCard={updateCardTodoTask}
                 removeCard={removeCardTodoTask}
-                weight={weight}
-                updateWeight={updateWeight}
+                totalWeight={totalWeight}
+                updateTotalWeight={updateTotalWeight}
             >
               <h2>To-do</h2>
             </Board>
@@ -220,8 +251,8 @@ function KanbanApp({currentProject, setProject}) {
                 addCard={addCardProgressTask}
                 updateCard={updateCardProgressTask}
                 removeCard={removeCardProgressTask}
-                weight={weight}
-                updateWeight={updateWeight}
+                totalWeight={totalWeight}
+                updateTotalWeight={updateTotalWeight}
             >
                 <h2>In progress</h2>
             </Board>
@@ -231,8 +262,8 @@ function KanbanApp({currentProject, setProject}) {
                 addCard={addCardFinishTask}
                 updateCard={updateCardFinishTask}
                 removeCard={removeCardFinishTask}
-                weight={weight}
-                updateWeight={updateWeight}
+                totalWeight={totalWeight}
+                updateTotalWeight={updateTotalWeight}
             >
               <h2>Completed</h2>
             </Board>

@@ -7,15 +7,19 @@ import { v4 as uuidv4 } from 'uuid';
 
 import {db} from "../../../Config/Firebase.js";
 import {collection, getDoc, getDocs, addDoc, updateDoc, deleteDoc, doc } from "firebase/firestore";
+import {useForm} from "react-hook-form";
 
 
 
 function CardInfo(props) {
+    const {clearErrors, setError, formState: { errors } } = useForm();
 
     const taskId = uuidv4();
 
 
     const [values, setValues] = useState(props.card);
+    const totalWeight = props.totalWeight;
+    const setTotalWeight = props.setTotalWeight;
 
 
     const updateTitle = (value) => {
@@ -35,7 +39,15 @@ function CardInfo(props) {
     const [achievedWeight, setAchievedWeight] = useState(values.achievedWeight || "");
     const [result, setResult] = useState(0); // Store the calculated result
 
+    const [startDate, setStartDate] = useState(values.startDate || "");
+    const [endDate, setEndDate] = useState(values.endDate || "");
+    const [actualStartDate, setActualStartDate] = useState(values.actualStartDate || "");
+    const [actualEndDate, setActualEndDate] = useState(values.actualEndDate || "");
 
+    const [subPlannedStartDate, setSubPlannedStartDate] = useState(values.subPlannedStartDate || "");
+    const [subPlannedEndDate, setSubPlannedEndDate] = useState(values.subPlannedEndDate || "");
+    const [subActualStartDate, setSubActualStartDate] = useState(values.subActualStartDate || "");
+    const [subActualEndDate, setSubActualEndDate] = useState(values.subActualEndDate || "");
 
     const handleKpiChange = (event) => {
         setKpi(event.target.value);
@@ -57,6 +69,18 @@ function CardInfo(props) {
 
 
     const handleWeightChange = (event) => {
+        clearErrors(["weight"]);
+        const weightInput = event.target.value;
+        const remainWeight = 100 - totalWeight;
+        console.log("weightInput: " + weightInput + ",totalWeight: " + totalWeight + ",remainWeight: " + remainWeight);
+        if (weightInput >= remainWeight) {
+            setError('weight', {
+                type: 'exceed',
+                message: 'Please input weight should not exceed current remain weight ' + remainWeight
+            })
+            event.target.focus();
+            return;
+        }
         setWeight(event.target.value);
         setValues({ ...values, weight: event.target.value });
     };
@@ -99,10 +123,150 @@ function CardInfo(props) {
         });
     };
 
+    const updateSubDate = (id, fieldName, date) => {
+        if (!date) return;
+        clearErrors(['subActualStartDate', 'subActutalEndDate']);
+        if (subPlannedStartDate && fieldName == 'subPlannedEndDate') {
+            const start = new Date(subPlannedStartDate).getTime();
+            const end = new Date(date).getTime();
+            if (subActualStartDate) {
+                const actualDate = new Date(subActualStartDate).getTime();
+                if (actualDate < start || actualDate > end) {
+                    alert('subActualStartDate must have a date between subPlannedStartDate and subPlannedEndDate');
+                    return;
+                }
+            }
+            if (subActualEndDate) {
+                const actualDate = new Date(subActualEndDate).getTime();
+                if (actualDate < start || actualDate > end) {
+                    alert('subActualEndDate must have a date between subPlannedStartDate and subPlannedEndDate');
+                    return;
+                }
+            }
+        } else if (subPlannedEndDate && fieldName == 'subPlannedStartDate') {
+            const start = new Date(date).getTime();
+            const end = new Date(subPlannedEndDate).getTime();
+            if (subActualStartDate) {
+                const actualDate = new Date(subActualStartDate).getTime();
+                if (actualDate < start || actualDate > end) {
+                    alert('subActualStartDate must have a date between subPlannedStartDate and subPlannedEndDate');
+                    return;
+                }
+            }
+            if (subActualEndDate) {
+                const actualDate = new Date(subActualEndDate).getTime();
+                if (actualDate < start || actualDate > end) {
+                    alert('subActualEndDate must have a date between subPlannedStartDate and subPlannedEndDate');
+                    return;
+                }
+            }
+        } else if (subPlannedStartDate && subPlannedEndDate) {
+            const start = new Date(subPlannedStartDate).getTime();
+            const end = new Date(subPlannedEndDate).getTime();
+            if (fieldName == 'subActualStartDate' || fieldName == 'subActualEndDate') {
+                const currentDate = new Date(date).getTime();
+                if (currentDate < start || currentDate > end) {
+                    alert(fieldName + ' must have a date between subPlannedStartDate and subPlannedEndDate');
+                    return;
+                }
+            }
+        }
 
+        if ('subPlannedStartDate' == fieldName) {
+            setSubPlannedStartDate(date);
+        } else if ('subPlannedEndDate' == fieldName) {
+            setSubPlannedEndDate(date);
+        } else if ('subActualStartDate' == fieldName) {
+            setSubActualStartDate(date);
+        } else if ('subActualEndDate' == fieldName) {
+            setSubActualEndDate(date);
+        }
+
+        const subTasks = [...values.subTasks];
+        const taskIndex = subTasks.findIndex((item) => item.id === id);
+        if (taskIndex < 0) return;
+
+        subTasks[taskIndex][fieldName] = date;
+
+        setValues({
+            ...values,
+            subTasks: subTasks,
+        });
+    };
 
     const updateDate = (fieldName, date) => {
         if (!date) return;
+        clearErrors(['actualStartDate', 'actualEndDate']);
+        if (startDate && fieldName == 'endDate') {
+            const start = new Date(startDate).getTime();
+            const end = new Date(date).getTime();
+            if (actualStartDate) {
+                const actualDate = new Date(actualStartDate).getTime();
+                if (actualDate < start || actualDate > end) {
+                    setError('actualStartDate', {
+                        type: 'exceed',
+                        message: 'actualStartDate must have a date between startDate and endDate'
+                    })
+                    return;
+                }
+            }
+            if (actualEndDate) {
+                const actualDate = new Date(actualEndDate).getTime();
+                if (actualDate < start || actualDate > end) {
+                    setError('actualEndDate', {
+                        type: 'exceed',
+                        message: 'actualEndDate must have a date between startDate and endDate'
+                    })
+                    return;
+                }
+            }
+        } else if (endDate && fieldName == 'startDate') {
+            const start = new Date(date).getTime();
+            const end = new Date(endDate).getTime();
+            if (actualStartDate) {
+                const actualDate = new Date(actualStartDate).getTime();
+                if (actualDate < start || actualDate > end) {
+                    setError('actualStartDate', {
+                        type: 'exceed',
+                        message: 'actualStartDate must have a date between startDate and endDate'
+                    })
+                    return;
+                }
+            }
+            if (actualEndDate) {
+                const actualDate = new Date(actualEndDate).getTime();
+                if (actualDate < start || actualDate > end) {
+                    setError('actualEndDate', {
+                        type: 'exceed',
+                        message: 'actualEndDate must have a date between startDate and endDate'
+                    })
+                    return;
+                }
+            }
+        } else if (startDate && endDate) {
+            const start = new Date(startDate).getTime();
+            const end = new Date(endDate).getTime();
+            if (fieldName == 'actualStartDate' || fieldName == 'actualEndDate') {
+                const currentDate = new Date(date).getTime();
+                if (currentDate < start || currentDate > end) {
+                    setError(fieldName, {
+                        type: 'exceed',
+                        message: fieldName + ' must have a date between startDate and endDate'
+                    })
+                    return;
+                }
+            }
+        }
+
+        if ('startDate' == fieldName) {
+            setStartDate(date);
+        } else if ('endDate' == fieldName) {
+            setEndDate(date);
+        } else if ('actualStartDate' == fieldName) {
+            setActualStartDate(date);
+        } else if ('actualEndDate' == fieldName) {
+            setActualEndDate(date);
+        }
 
         setValues({
             ...values,
@@ -287,7 +451,13 @@ function CardInfo(props) {
                             style={{ width: '300px' }}
                             max={100}
                         />
-
+                        {
+                            errors.weight && (
+                                <span style={{ color: "red" }}>
+                                    {errors.weight.message}
+                                </span>
+                            )
+                        }
                     </div>
                     <div className="cardinfo_inline_box">
                         <div className="cardinfo_box_title">
@@ -334,6 +504,13 @@ function CardInfo(props) {
                             min={values.actualStartDate || new Date().toISOString().substr(0, 10)}
                             onChange={(event) => updateDate("actualStartDate", event.target.value)}
                         />
+                        {
+                            errors.actualStartDate && (
+                                <span style={{ color: "red" }}>
+                                    {errors.actualStartDate.message}
+                                </span>
+                            )
+                        }
                     </div>
 
                     <div className="cardinfo_box" style={{marginRight:'4rem' }}>
@@ -361,6 +538,13 @@ function CardInfo(props) {
                             min={values.actualEndDate || new Date().toISOString().substr(0, 10)}
                             onChange={(event) => updateDate("actualEndDate", event.target.value)}
                         />
+                        {
+                            errors.actualEndDate && (
+                                <span style={{ color: "red" }}>
+                                    {errors.actualEndDate.message}
+                                </span>
+                            )
+                        }
                     </div>
 
                 </div>
@@ -419,7 +603,7 @@ function CardInfo(props) {
                                                 type="date"
                                                 value={item.subPlannedStartDate || ""}
                                                 onChange={(event) =>
-                                                    updateSubTask(item.id, "subPlannedStartDate", event.target.value)
+                                                    updateSubDate(item.id, "subPlannedStartDate", event.target.value)
                                                 }
 
                                             />
@@ -431,7 +615,7 @@ function CardInfo(props) {
                                                 type="date"
                                                 value={item.subPlannedEndDate || ""}
                                                 onChange={(event) =>
-                                                    updateSubTask(item.id, "subPlannedEndDate", event.target.value)
+                                                    updateSubDate(item.id, "subPlannedEndDate", event.target.value)
                                                 }
                                             />
                                         </div>
@@ -442,7 +626,7 @@ function CardInfo(props) {
                                                 type="date"
                                                 value={item.subActualStartDate || ""}
                                                 onChange={(event) =>
-                                                    updateSubTask(item.id, "subActualStartDate", event.target.value)
+                                                    updateSubDate(item.id, "subActualStartDate", event.target.value)
                                                 }
                                             />
                                         </div>
@@ -453,7 +637,7 @@ function CardInfo(props) {
                                                 type="date"
                                                 value={item.subActualEndDate || ""}
                                                 onChange={(event) =>
-                                                    updateSubTask(item.id, "subActualEndDate", event.target.value)
+                                                    updateSubDate(item.id, "subActualEndDate", event.target.value)
                                                 }
                                             />
                                         </div>
