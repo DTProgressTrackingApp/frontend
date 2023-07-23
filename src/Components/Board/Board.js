@@ -27,6 +27,7 @@ function Board(props) {
                         removeCard={props.removeCard}
                         totalWeight={props.totalWeight}
                         setTotalWeight={props.setTotalWeight}
+                        shiftSubTaskStatus={props.shiftSubTaskStatus}
                     />
                 ))}
                 <Editable

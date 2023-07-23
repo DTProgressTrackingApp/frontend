@@ -295,9 +295,12 @@ function CardInfo(props) {
         console.log(" updated values in Firestore");
     };
 
-    const updateSubValues = async () => {
+    const updateSubValues = async (subTask) => {
         alert("Save subtask successfully");
         props.updateCard(values);
+        const subTaskTodo = values.subTasks.find(t => t.id == subTask.id);
+        console.log("Before shift, sub task status: " + subTaskTodo.subStatus);
+        props.shiftSubTaskStatus(values, subTaskTodo.subStatus);
         // const subTaskRef = doc(db, "taskInfo", subTaskId);
 
         // Update the document with the new values
@@ -674,7 +677,7 @@ function CardInfo(props) {
                                         />
                                     </td>
                                     <td >
-                                        <button style={{ width: "4rem",  }} onClick={() => updateSubValues(item.id)}>Save subtask</button>
+                                        <button style={{ width: "4rem",  }} onClick={() => updateSubValues(item)}>Save subtask</button>
                                     </td>
                                 </tr>
                             ))}

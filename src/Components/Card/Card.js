@@ -30,6 +30,11 @@ function Card(props) {
         setCard(card);
     }
 
+    const shiftSubTaskStatus = (task, output) => {
+        props.shiftSubTaskStatus(task, output);
+        setCard(task);
+    }
+
 
     return (
         <>
@@ -43,6 +48,7 @@ function Card(props) {
                     updateCard={(card) => updateCard(card)}
                     totalWeight={props.totalWeight}
                     setTotalWeight={props.setTotalWeight}
+                    shiftSubTaskStatus={shiftSubTaskStatus}
                 />
             )}
             <div

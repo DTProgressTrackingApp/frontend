@@ -230,6 +230,74 @@ function KanbanApp({currentProject, setProject}) {
     setTotalWeight(value);
   };
 
+  const shiftSubTaskStatus = (task, output) => {
+    console.log("shiftSubTaskStatus, taskId: " + task.id + ", output: " + output);
+    const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
+    const findProject = saveProject.find(p => p.id == currentProject.id);
+    if (findProject) {
+      console.log("Before todoTask@size: " + todoTask.length + ",progressTask@size: " + progressTask.length + ",finishTask@size: " + finishTask.length);
+      if (findProject.todoTask.find(t => t.id == task.id)) {
+        console.log("Into todo");
+        if (('todo' == output)) {
+          return;
+        }
+        const removeTodoTask = todoTask.filter(t => t.id != task.id);
+        findProject.todoTask = [];
+        findProject.todoTask = removeTodoTask;
+
+        if ('inprogress' == output) {
+          progressTask.push(task);
+          findProject.progressTask = [];
+          findProject.progressTask = progressTask;
+        } else if ('completed' == output) {
+          finishTask.push(task);
+          findProject.finishTask = [];
+          findProject.finishTask = finishTask;
+        }
+      } else if (findProject.progressTask.find(t => t.id == task.id)) {
+          if (('inprogress' == output)) {
+            return;
+          }
+          const removeProgressTask = progressTask.filter(t => t.id != task.id);
+          findProject.progressTask = [];
+          findProject.progressTask = removeProgressTask;
+
+          if ('todo' == output) {
+            todoTask.push(task);
+            findProject.todoTask = [];
+            findProject.todoTask = todoTask;
+          } else if ('completed' == output) {
+            finishTask.push(task);
+            findProject.finishTask = [];
+            findProject.finishTask = finishTask;
+          }
+      } else if (findProject.finishTask.find(t => t.id == task.id)) {
+        if (('completed' == output)) {
+          return;
+        }
+        const removeFinishTask = finishTask.filter(t => t.id != task.id);
+        findProject.finishTask = [];
+        findProject.finishTask = removeFinishTask;
+
+        if ('todo' == output) {
+          todoTask.push(task);
+          findProject.todoTask = [];
+          findProject.todoTask = todoTask;
+        } else if ('inprogress' == output) {
+          progressTask.push(task);
+          findProject.progressTask = [];
+          findProject.progressTask = progressTask;
+        }
+      }
+      setTodoTask(findProject.todoTask);
+      setProgressTask(findProject.progressTask);
+      setFinishTask(findProject.finishTask);
+      console.log("After todoTask@size: " + todoTask.length + ",progressTask@size: " + progressTask.length + ",finishTask@size: " + finishTask.length);
+      setProject(findProject);
+      localStorage.setItem("prac-kanban", JSON.stringify(saveProject));
+    }
+  }
+
   return (
       <div className="kapp">
         <div className="app_boards_container">
@@ -242,6 +310,7 @@ function KanbanApp({currentProject, setProject}) {
                 removeCard={removeCardTodoTask}
                 totalWeight={totalWeight}
                 updateTotalWeight={updateTotalWeight}
+                shiftSubTaskStatus={shiftSubTaskStatus}
             >
               <h2>To-do</h2>
             </Board>
@@ -253,6 +322,7 @@ function KanbanApp({currentProject, setProject}) {
                 removeCard={removeCardProgressTask}
                 totalWeight={totalWeight}
                 updateTotalWeight={updateTotalWeight}
+                shiftSubTaskStatus={shiftSubTaskStatus}
             >
                 <h2>In progress</h2>
             </Board>
@@ -264,6 +334,7 @@ function KanbanApp({currentProject, setProject}) {
                 removeCard={removeCardFinishTask}
                 totalWeight={totalWeight}
                 updateTotalWeight={updateTotalWeight}
+                shiftSubTaskStatus={shiftSubTaskStatus}
             >
               <h2>Completed</h2>
             </Board>
