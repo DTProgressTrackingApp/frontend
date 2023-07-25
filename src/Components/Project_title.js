@@ -4,7 +4,7 @@ import {setBatch} from "react-redux/es/utils/batch.js";
 import {addProjectInfo, getKanbanProject, getProjectValues} from "../Service/FirestoreService.js";
 import {set} from "react-hook-form";
 
-function Project_title({budget, setBudget}) {
+function Project_title({budget, setBudget, currentUser}) {
     console.log("budget here:", budget);
 
     const [values, setValues] = useState([]);
@@ -52,6 +52,7 @@ function Project_title({budget, setBudget}) {
                 <input
                     type="text"
                     value={values.desc}
+                    disabled={currentUser.role == 'MEMBER' ? true : false}
                     onChange={(e) => setValues({ ...values, desc: e.target.value })}
                     placeholder="Enter scope"
                 />
@@ -62,6 +63,7 @@ function Project_title({budget, setBudget}) {
                 <input
                     type="text"
                     value={values.objectives}
+                    disabled={currentUser.role == 'MEMBER' ? true : false}
                     onChange={(e) => setValues({ ...values, objectives: e.target.value })}
                     placeholder="Enter objectives"
                 />
@@ -72,6 +74,7 @@ function Project_title({budget, setBudget}) {
                 <input
                     type="text"
                     value={values.driveLink}
+                    disabled={currentUser.role == 'MEMBER' ? true : false}
                     onChange={(e) => setValues({ ...values, driveLink: e.target.value })}
                     placeholder="Enter drive link"
                 />
@@ -82,6 +85,7 @@ function Project_title({budget, setBudget}) {
                 <input
                     type="text"
                     value={values.sponsor}
+                    disabled={currentUser.role == 'MEMBER' ? true : false}
                     onChange={(e) => setValues({ ...values, sponsor: e.target.value })}
                     placeholder="Enter sponsor"
                 />
@@ -94,6 +98,7 @@ function Project_title({budget, setBudget}) {
                     <input
                         type="number"
                         value={budget}
+                        disabled={currentUser.role == 'MEMBER' ? true : false}
                         onChange={handleBudgetChange}
                         placeholder="Enter budget"
                         style={{ width: "90px" }}

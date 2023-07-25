@@ -48,6 +48,7 @@ function Card(props) {
                     totalWeight={props.totalWeight}
                     setTotalWeight={props.setTotalWeight}
                     shiftSubTaskStatus={shiftSubTaskStatus}
+                    currentUser={props.currentUser}
                 />
             )}
             <div

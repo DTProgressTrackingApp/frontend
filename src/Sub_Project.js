@@ -112,7 +112,7 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
             <div className="container scrollable">
                 <div className="column-container">
                     <h2 className="project_title">{subProject.id + ' ' + subProject.title}</h2>
-                    <Project_title budget={budget} setBudget={handleBudgetChange} />
+                    <Project_title budget={budget} setBudget={handleBudgetChange} currentUser={currentUser}/>
                     <Leftside cards={cards} incurredCost={incurredCost} taskBudget={taskBudget} budget={budget} progress={{completed, incompleted, todoWeight, progressWeight, finishWeight}} />
                 </div>
                 {
@@ -121,7 +121,7 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
                 {isOpen && <AssignMemberModal project={subProject} setIsOpen={setIsOpen} />}
                 <Logout />
                 <button className="back_button" onClick={onBackButtonClick}><span>&#8680;</span></button>
-                <KanbanApp currentProject={subProject} setProject={project => setProject(project)} />
+                <KanbanApp currentProject={subProject} setProject={project => setProject(project)} currentUser={currentUser}/>
             </div>
         </div>
     );

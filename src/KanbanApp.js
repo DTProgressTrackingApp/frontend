@@ -7,7 +7,7 @@ import {authToken} from "./Service/AuthService.js";
 import {useNavigate} from "react-router-dom";
 import {addKanpanProject, getKanbanProject, getProjectValues} from "./Service/FirestoreService.js";
 
-function KanbanApp({currentProject, setProject}) {
+function KanbanApp({currentProject, setProject, currentUser}) {
   const [currentPrj, setCurrentPrj] = useState(currentProject);
   const navigate = useNavigate();
   const [totalWeight, setTotalWeight] = useState(() => {
@@ -343,6 +343,7 @@ function KanbanApp({currentProject, setProject}) {
                 totalWeight={totalWeight}
                 updateTotalWeight={updateTotalWeight}
                 shiftSubTaskStatus={shiftSubTaskStatus}
+                currentUser={currentUser}
             >
               <h2>To-do</h2>
             </Board>
@@ -355,6 +356,7 @@ function KanbanApp({currentProject, setProject}) {
                 totalWeight={totalWeight}
                 updateTotalWeight={updateTotalWeight}
                 shiftSubTaskStatus={shiftSubTaskStatus}
+                currentUser={currentUser}
             >
                 <h2>In progress</h2>
             </Board>
@@ -367,6 +369,7 @@ function KanbanApp({currentProject, setProject}) {
                 totalWeight={totalWeight}
                 updateTotalWeight={updateTotalWeight}
                 shiftSubTaskStatus={shiftSubTaskStatus}
+                currentUser={currentUser}
             >
               <h2>Completed</h2>
             </Board>

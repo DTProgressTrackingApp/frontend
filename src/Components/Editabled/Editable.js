@@ -27,6 +27,7 @@ function Editable(props) {
           <input
             type="text"
             value={inputText}
+            disabled={props?.currentUser?.role == 'MEMBER' ? true : false}
             placeholder={props.placeholder || props.text}
             onChange={(event) => setInputText(event.target.value)}
             autoFocus
@@ -37,14 +38,16 @@ function Editable(props) {
           </div>
         </form>
       ) : (
-        <p
-          className={`editable_display ${
-            props.displayClass ? props.displayClass : ""
-          }`}
-          onClick={() => setIsEditable(true)}
-        >
-          {props.text}
-        </p>
+          props?.currentUser?.role == 'MANAGER' && (
+              <p
+                  className={`editable_display ${
+                      props.displayClass ? props.displayClass : ""
+                  }`}
+                  onClick={() => setIsEditable(true)}
+              >
+                {props.text}
+              </p>
+          )
       )}
     </div>
   );

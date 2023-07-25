@@ -28,6 +28,7 @@ function Board(props) {
                         totalWeight={props.totalWeight}
                         setTotalWeight={props.setTotalWeight}
                         shiftSubTaskStatus={props.shiftSubTaskStatus}
+                        currentUser={props.currentUser}
                     />
                 ))}
                 <Editable
@@ -36,6 +37,7 @@ function Board(props) {
                     displayClass="board_add-card"
                     editClass="board_add-card_edit"
                     onSubmit={(value) => submit(value)}
+                    currentUser={props.currentUser}
                 />
             </div>
         </div>

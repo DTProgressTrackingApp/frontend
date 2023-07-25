@@ -345,12 +345,16 @@ function CardInfo(props) {
         <Modal onClose={props.onClose}>
             <div className="cardinfo">
 
-                <button style={{marginLeft:"72rem", width:'4rem',fontSize: "12px",
-                    color: "#ffffff",
-                    background: "black",
-                    padding:"10px",
-                    fontWeight: "bold",
-                    borderRadius: "3px"}} onClick={updateValues}>Save</button>
+                {props.currentUser.role == 'MANAGER' && (
+                    <button style={{marginLeft:"72rem", width:'4rem',fontSize: "12px",
+                        color: "#ffffff",
+                        background: "black",
+                        padding:"10px",
+                        fontWeight: "bold",
+                        borderRadius: "3px"}}
+                            onClick={updateValues}
+                    >Save</button>
+                )}
 
                 <div className="cardinfo_box">
                     <div className="cardinfo_box_title">
@@ -362,6 +366,7 @@ function CardInfo(props) {
                         text={values.title}
                         placeholder="Enter Title"
                         onSubmit={updateTitle}
+                        currentUser={props.currentUser}
                     />
                 </div>
 
@@ -376,6 +381,7 @@ function CardInfo(props) {
                         onChange={(e) => setValues({ ...values, desc: e.target.value })}
                         placeholder="Enter description"
                         style={{ width: '920px' }}
+                        disabled={props.currentUser.role == 'MEMBER' ? true : false}
                     />
                 </div>
 
@@ -391,6 +397,7 @@ function CardInfo(props) {
                             onChange={(e) => setValues({ ...values, taskBudget: e.target.value })}
                             placeholder="Enter Budget"
                             style={{ width: '200px',marginRight: '10px' }}
+                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                         /><span style={{ fontSize: "15px"}}>LKR</span>
                     </div>
                 </div>
@@ -406,6 +413,7 @@ function CardInfo(props) {
                                 onChange={(e) => setValues({ ...values, cic: e.target.value })}
                                 placeholder="Enter Current incurred cost"
                                 style={{ width: '200px',marginRight: '10px' }}
+                                disabled={props.currentUser.role == 'MEMBER' ? true : false}
                             /><span style={{ fontSize: "15px"}}>LKR</span>
                         </div>
                     </div>
@@ -424,6 +432,7 @@ function CardInfo(props) {
                             onChange={(e) => setValues({ ...values, kpi: e.target.value })}
                             placeholder="Enter KPI"
                             style={{ marginRight: '20px',width: '100px' }}
+                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                         />
                         <input
                             type="text"
@@ -436,6 +445,7 @@ function CardInfo(props) {
                             placeholder="Enter KPI (max 100 characters)"
                             style={{ width: '800px' }}
                             maxLength={40}
+                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                         />
                     </div>
                 </div>
@@ -454,6 +464,7 @@ function CardInfo(props) {
                             className="input_box"
                             style={{ width: '300px' }}
                             max={100}
+                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                         />
                         {
                             errors.weight && (
@@ -475,6 +486,7 @@ function CardInfo(props) {
                             className="input_box"
                             style={{ width: '300px' }}
                             max={100}
+                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                         />
 
                     </div>
@@ -492,6 +504,7 @@ function CardInfo(props) {
                             value={values.startDate || ""}
                             min={values.startDate || new Date().toISOString().substr(0, 10)}
                             onChange={(event) => updateDate("startDate", event.target.value)}
+                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                         />
 
 
@@ -507,6 +520,7 @@ function CardInfo(props) {
                             value={values.actualStartDate || ""}
                             min={values.actualStartDate || new Date().toISOString().substr(0, 10)}
                             onChange={(event) => updateDate("actualStartDate", event.target.value)}
+                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                         />
                         {
                             errors.actualStartDate && (
@@ -527,6 +541,7 @@ function CardInfo(props) {
                             value={values.endDate || ""}
                             min={values.startDate || new Date().toISOString().substr(0, 10)}
                             onChange={(event) => updateDate("endDate", event.target.value)}
+                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                         />
                     </div>
 
@@ -541,6 +556,7 @@ function CardInfo(props) {
                             value={values.actualEndDate || ""}
                             min={values.actualEndDate || new Date().toISOString().substr(0, 10)}
                             onChange={(event) => updateDate("actualEndDate", event.target.value)}
+                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                         />
                         {
                             errors.actualEndDate && (
@@ -590,6 +606,7 @@ function CardInfo(props) {
                                                 updateSubTask(item.id, "text", event.target.value)
                                             }
                                             style={{ width: 'fit-content' }}
+                                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                                         />
                                     </td>
                                     <td>
@@ -599,6 +616,7 @@ function CardInfo(props) {
                                                 updateSubTask(item.id, "description", event.target.value)
                                             }
                                             style={{ width: 'fit-content' }}
+                                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                                         />
                                     </td>
                                     <td>
@@ -609,7 +627,7 @@ function CardInfo(props) {
                                                 onChange={(event) =>
                                                     updateSubDate(item.id, "subPlannedStartDate", event.target.value)
                                                 }
-
+                                                disabled={props.currentUser.role == 'MEMBER' ? true : false}
                                             />
                                         </div>
                                     </td>
@@ -621,6 +639,7 @@ function CardInfo(props) {
                                                 onChange={(event) =>
                                                     updateSubDate(item.id, "subPlannedEndDate", event.target.value)
                                                 }
+                                                disabled={props.currentUser.role == 'MEMBER' ? true : false}
                                             />
                                         </div>
                                     </td>
@@ -632,6 +651,7 @@ function CardInfo(props) {
                                                 onChange={(event) =>
                                                     updateSubDate(item.id, "subActualStartDate", event.target.value)
                                                 }
+                                                disabled={props.currentUser.role == 'MEMBER' ? true : false}
                                             />
                                         </div>
                                     </td>
@@ -643,6 +663,7 @@ function CardInfo(props) {
                                                 onChange={(event) =>
                                                     updateSubDate(item.id, "subActualEndDate", event.target.value)
                                                 }
+                                                disabled={props.currentUser.role == 'MEMBER' ? true : false}
                                             />
                                         </div>
                                     </td>
@@ -653,6 +674,7 @@ function CardInfo(props) {
                                                 updateSubTask(item.id, "status", event.target.value)
                                             }
                                             style={{ width: 'fit-content' }}
+                                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                                         >
                                             <option value="todo">To Do</option>
                                             <option value="inprogress">In Progress</option>
@@ -665,6 +687,7 @@ function CardInfo(props) {
                                             onChange={(event) =>
                                                 updateSubTask(item.id, "remark", event.target.value)
                                             }
+                                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                                             style={{ width: 'fit-content' }}
                                         />
                                     </td>
@@ -674,18 +697,24 @@ function CardInfo(props) {
                                             onChange={(event) =>
                                                 updateSubTask(item.id, "membersAssigned", event.target.value)
                                             }
+                                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
                                             style={{ width: 'fit-content' }}
                                         />
                                     </td>
-                                    <td >
-                                        <button style={{ width: "4rem",  }} onClick={() => updateSubValues(item)}>Save subtask</button>
-                                    </td>
+
+                                    {props.currentUser.role == 'MANAGER' && (
+                                        <td >
+                                            <button style={{ width: "4rem",  }} onClick={() => updateSubValues(item)} disabled={props.currentUser.role == 'MEMBER' ? true : false}>Save subtask</button>
+                                        </td>
+                                    )}
                                 </tr>
                             ))}
                             </tbody>
                         </table>
 
-                        <button className="addTask" onClick={() => addSubTask("New Task")}>Add sub task</button>
+                        {props.currentUser.role == 'MANAGER' && (
+                            <button className="addTask" onClick={() => addSubTask("New Task")}>Add sub task</button>
+                        )}
                     </div>
                 </div>
 
