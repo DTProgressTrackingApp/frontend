@@ -110,20 +110,7 @@ function CardInfo(props) {
     };
 
 
-    const updateSubTask = (id, field, value) => {
-        const subTasks = [...values.subTasks];
-        const taskIndex = subTasks.findIndex((item) => item.id === id);
-        if (taskIndex < 0) return;
-
-        subTasks[taskIndex][field] = value;
-
-        setValues({
-            ...values,
-            subTasks: subTasks,
-        });
-    };
-
-    const updateSubDate = (id, fieldName, date) => {
+     const updateSubDate = (id, fieldName, date) => {
         if (!date) return;
         clearErrors(['subActualStartDate', 'subActutalEndDate']);
         if (subPlannedStartDate && fieldName == 'subPlannedEndDate') {
@@ -279,6 +266,7 @@ function CardInfo(props) {
             [fieldName]: date,
         });
     };
+
 
 
 
