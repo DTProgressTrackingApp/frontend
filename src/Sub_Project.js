@@ -109,21 +109,32 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
 
     return (
         <div className="Sub_Project">
+
+            <div className="navbar">
+                {/*<div className="navigation-bar">*/}
+                {/*    {currentUser.role === "MANAGER" && (*/}
+                {/*        <button className="assign_button" onClick={() => setIsOpen(true)}>*/}
+                {/*            <span>Assign member</span>*/}
+                {/*        </button>*/}
+                {/*    )}*/}
+                {/*    {isOpen && <AssignMemberModal project={subProject} setIsOpen={setIsOpen} />}*/}
+                {/*    <Logout />*/}
+                {/*</div>*/}
+                <button className="back_button" onClick={onBackButtonClick}>
+                    <span>&#8680;</span>
+                </button>
+            </div>
+            <div className="content">
             <div className="container scrollable">
                 <div className="column-container">
                     <h2 className="project_title">{subProject.id + ' ' + subProject.title}</h2>
                     <Project_title budget={budget} setBudget={handleBudgetChange} currentUser={currentUser} currentProject={subProject}/>
                     <Leftside cards={cards} incurredCost={incurredCost} taskBudget={taskBudget} budget={budget} progress={{completed, incompleted, todoWeight, progressWeight, finishWeight}} />
                 </div>
-                {
-                    currentUser.role == "MANAGER" && <button className="assign_button" onClick={() => setIsOpen(true)}><span>Assign member</span></button>
-                }
-                {isOpen && <AssignMemberModal project={subProject} setIsOpen={setIsOpen} />}
-                <Logout />
-                <button className="back_button" onClick={onBackButtonClick}><span>&#8680;</span></button>
+
                 <KanbanApp currentProject={subProject} setProject={project => setProject(project)} currentUser={currentUser}/>
             </div>
-        </div>
+            </div></div>
     );
 }
 
