@@ -1,17 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./Project_title.css";
-import {setBatch} from "react-redux/es/utils/batch.js";
-import {addProjectInfo, getKanbanProject, getProjectValues} from "../Service/FirestoreService.js";
-import {set} from "react-hook-form";
+import {addProjectInfo, getProjectValues} from "../Service/FirestoreService.js";
 
-function Project_title({budget, setBudget, currentUser}) {
+function Project_title({budget, setBudget, currentUser, currentProject}) {
     console.log("budget here:", budget);
 
     const [values, setValues] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await getProjectValues();
+            const data = await getProjectValues(currentProject.id);
             return data;
         }
         fetchData().then(data => {
@@ -29,7 +27,7 @@ function Project_title({budget, setBudget, currentUser}) {
         console.log("Values Project: " + JSON.stringify(values) + ", length: " + Object.keys(values).length);
         if (values && Object.keys(values).length !== 0) {
             const fetchData = async () => {
-                await addProjectInfo(values);
+                await addProjectInfo(values, currentProject.id);
             }
             fetchData().then(() => {
                     console.log("Add project info successfully");

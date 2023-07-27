@@ -169,6 +169,12 @@ function CardInfo(props) {
                     alert(fieldName + ' must have a date between subPlannedStartDate and subPlannedEndDate');
                     return;
                 }
+            } else if (subPlannedStartDate < actualStartDate || subPlannedStartDate > actualEndDate) {
+                alert('subPlannedStartDate must have a date between actualStartDate and actualEndDate');
+                return;
+            } else if (subPlannedEndDate < actualStartDate || subPlannedEndDate > actualEndDate) {
+                alert('subPlannedEndDate must have a date between actualStartDate and actualEndDate');
+                return;
             }
         }
 

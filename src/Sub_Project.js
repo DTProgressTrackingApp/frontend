@@ -14,7 +14,7 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
 
     useEffect(() => {
         const fetchData = async () => {
-            const data = await getProjectValues();
+            const data = await getProjectValues(subProject.id);
             return data;
         }
         fetchData().then(data => {
@@ -112,7 +112,7 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
             <div className="container scrollable">
                 <div className="column-container">
                     <h2 className="project_title">{subProject.id + ' ' + subProject.title}</h2>
-                    <Project_title budget={budget} setBudget={handleBudgetChange} currentUser={currentUser}/>
+                    <Project_title budget={budget} setBudget={handleBudgetChange} currentUser={currentUser} currentProject={subProject}/>
                     <Leftside cards={cards} incurredCost={incurredCost} taskBudget={taskBudget} budget={budget} progress={{completed, incompleted, todoWeight, progressWeight, finishWeight}} />
                 </div>
                 {

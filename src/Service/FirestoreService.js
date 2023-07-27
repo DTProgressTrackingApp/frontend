@@ -1,5 +1,6 @@
-import {doc, getDoc, setDoc} from "firebase/firestore";
+import {doc, getDoc, setDoc, updateDoc} from "firebase/firestore";
 import {db} from "../Config/Firebase.js";
+import {merge} from "chart.js/helpers";
 
 export const addKanpanProject = async (data) => {
     console.log("addKanpanProject to firestore: " + JSON.stringify(data));
@@ -19,14 +20,14 @@ export const addKanpanProject = async (data) => {
     }
 }
 
-export const addProjectInfo = async (data) => {
-    console.log("addProjectInfo to firestore" + JSON.stringify(data));
+export const addProjectInfo = async (data, projectId) => {
+    console.log("addProjectInfo to firestore, projectId: " + projectId + ",data: " + JSON.stringify(data));
     try {
         const kanpanRef = doc(db, "taskInfo", "ProjectValue");
         console.log("Document written with ID: ", kanpanRef.id);
-        await setDoc(kanpanRef, {
-            'projectValues' : data
-        }).catch(e => {
+        await updateDoc(kanpanRef, {
+            [projectId]: data
+        }, { merge: true }).catch(e => {
             console.log(e);
         });
     } catch (e) {
@@ -51,14 +52,14 @@ export const getKanbanProject = async () => {
     }
 }
 
-export const getProjectValues = async () => {
-    console.log("getProjectValues from firestore");
+export const getProjectValues = async (id) => {
+    console.log("getProjectValues from firestore, id: " + id);
     try {
         const kanpanRef = doc(db, "taskInfo", "ProjectValue");
         const kanpanSnap = await getDoc(kanpanRef);
         if (kanpanSnap.exists()) {
-            console.log("getProjectValues:", kanpanSnap.data()['projectValues']);
-            return kanpanSnap.data()['projectValues'];
+            console.log("getProjectValues:", kanpanSnap.data()[id]);
+            return kanpanSnap.data()[id];
         } else {
             // docSnap.data() will be undefined in this case
             console.log("No such document!");
