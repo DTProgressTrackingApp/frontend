@@ -110,7 +110,20 @@ function CardInfo(props) {
     };
 
 
-     const updateSubDate = (id, fieldName, date) => {
+    const updateSubTask = (id, field, value) => {
+        const subTasks = [...values.subTasks];
+        const taskIndex = subTasks.findIndex((item) => item.id === id);
+        if (taskIndex < 0) return;
+
+        subTasks[taskIndex][field] = value;
+
+        setValues({
+            ...values,
+            subTasks: subTasks,
+        });
+    };
+
+    const updateSubDate = (id, fieldName, date) => {
         if (!date) return;
         clearErrors(['subActualStartDate', 'subActutalEndDate']);
         if (subPlannedStartDate && fieldName == 'subPlannedEndDate') {
@@ -269,7 +282,6 @@ function CardInfo(props) {
 
 
 
-
     const updateValues = async () => {
         alert("Save task successfully");
         props.updateCard(values);
@@ -380,21 +392,21 @@ function CardInfo(props) {
                 </div>
 
                 <div className="cardinfo_inline_boxes">
-                <div className="cardinfo_inline_box" style={{ paddingRight: '2rem', width: '18rem' }}>
-                    <div className="cardinfo_box_title">
-                        <p>Budget</p>
+                    <div className="cardinfo_inline_box" style={{ paddingRight: '2rem', width: '18rem' }}>
+                        <div className="cardinfo_box_title">
+                            <p>Budget</p>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                            <input
+                                type="number"
+                                value={values.taskBudget}
+                                onChange={(e) => setValues({ ...values, taskBudget: e.target.value })}
+                                placeholder="Enter Budget"
+                                style={{ width: '200px',marginRight: '10px' }}
+                                disabled={props.currentUser.role == 'MEMBER' ? true : false}
+                            /><span style={{ fontSize: "15px"}}>LKR</span>
+                        </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                        <input
-                            type="number"
-                            value={values.taskBudget}
-                            onChange={(e) => setValues({ ...values, taskBudget: e.target.value })}
-                            placeholder="Enter Budget"
-                            style={{ width: '200px',marginRight: '10px' }}
-                            disabled={props.currentUser.role == 'MEMBER' ? true : false}
-                        /><span style={{ fontSize: "15px"}}>LKR</span>
-                    </div>
-                </div>
 
                     <div className="cardinfo_inline_box" style={{ paddingRight: '2rem', width: '18rem' }}>
                         <div className="cardinfo_box_title">
