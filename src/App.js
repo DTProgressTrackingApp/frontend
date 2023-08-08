@@ -15,7 +15,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Login />} />
                     <Route path="/manager/projects/dashboard" element={<ProjectView />} />
-                    <Route path="/member/projects/dashboard" element={<ProjectView />} />
+                    {/*<Route path="/member/projects/dashboard" element={<ProjectView />} />*/}
                     {/*<Route path="/member/dashboard" element={<Sub_Project />} />*/}
                     {/*<Switch>*/}
                     {/*    <Route path="/" element={<Login />} />*/}

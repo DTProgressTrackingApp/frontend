@@ -27,7 +27,7 @@ export const AssignMemberModal = ({project, setIsOpen}) => {
         // let allCurrentProj = JSON.parse(localStorage.getItem("prac-kanban"));
         const allCurrentProj = await getKanbanProject();
 
-        const index = allCurrentProj.findIndex((obj => obj.id == project.id));
+        const index = allCurrentProj.findIndex((obj => obj.id === project.id));
 
         allCurrentProj[index].members = [];
         project.members = [];
@@ -61,7 +61,7 @@ export const AssignMemberModal = ({project, setIsOpen}) => {
             return;
         }
         project.members.push(email);
-        const index = allCurrentProj.findIndex((obj => obj.id == project.id));
+        const index = allCurrentProj.findIndex((obj => obj.id === project.id));
         allCurrentProj[index].members.push(email);
         if (!authToken()) {
             navigate("/") // Redirect to login page

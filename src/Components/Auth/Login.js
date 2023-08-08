@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom"
 import { login } from "../../Service/AuthService.js";
 
 const Login = () => {
-    const { handleSubmit, register, setError, formState: { errors } } = useForm();
+    const { handleSubmit, register, setError,
+        formState: { errors } } = useForm();
     const navigate = useNavigate();
 
     const handleLogin = (values) => {
@@ -13,10 +14,10 @@ const Login = () => {
         login(values.email, values.password)
             .then((response) => {
                 console.log("Login RES: " + JSON.stringify(response))
-                if (response.status == 200) {
+                if (response.status === 200) {
                     if (response.data) {
                         localStorage.setItem("token", response.data.token);
-                        if (response.data.user.role == "MANAGER") {
+                        if (response.data.user.role === "MANAGER") {
                             navigate("/manager/projects/dashboard", { state: response.data.user });
                         } else {
                             navigate("/member/projects/dashboard", { state: response.data.user });
@@ -26,15 +27,15 @@ const Login = () => {
                 }
             }, (error) => {
                 console.log("Login ERROR: " + JSON.stringify(error))
-                if (error?.response?.status != 200) {
-                    if (error?.response?.status == 400) {
+                if (error?.response?.status !== 200) {
+                    if (error?.response?.status === 400) {
                         // do something
                         console.log("error 400");
                         setError('email', {
                             type: 'server-400',
                             message: error.response.data.message
                         })
-                    } else if (error?.response?.status == 403) {
+                    } else if (error?.response?.status === 403) {
                         // do something
                         console.log("error 403");
                         setError('email', {

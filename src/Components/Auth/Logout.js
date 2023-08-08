@@ -11,7 +11,7 @@ export const Logout = () => {
         logout()
             .then((response) => {
                 console.log("Logout RES: " + JSON.stringify(response))
-                if (response.status == 200) {
+                if (response.status === 200) {
                     localStorage.removeItem("token");
                     navigate("/");
                 }

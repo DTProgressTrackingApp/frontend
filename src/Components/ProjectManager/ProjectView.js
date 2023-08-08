@@ -35,7 +35,7 @@ export const ProjectView = () => {
                  setSubProjects([]);
                  return [];
              }
-             if (user.role == 'MANAGER') {
+             if (user.role === 'MANAGER') {
                  setSubProjects(allCurrentProjects);
                  return;
              }
@@ -45,7 +45,7 @@ export const ProjectView = () => {
              setSubProjects(allCurrentProjects);
          }
         );
-    }, [])
+    }, [user.email,user.role])
 
     const [activeSubProject, setActiveSubProject] = useState(null);
 

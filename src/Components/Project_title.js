@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import "./Project_title.css";
 import {addProjectInfo, getProjectValues} from "../Service/FirestoreService.js";
+import TagsInput from "./TagsInput.js";
 
 function Project_title({budget, setBudget, currentUser, currentProject}) {
     console.log("budget here:", budget);
@@ -56,15 +57,18 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
                 />
             </div>
 
-            <div className="project_inline_box">
+            <div className="project_inline_box1">
+
                 <p style={{ marginRight: "8px", fontSize: "15px" }}>Objectives</p>
-                <input
-                    type="text"
-                    value={values.objectives}
-                    disabled={currentUser.role == 'MEMBER' ? true : false}
-                    onChange={(e) => setValues({ ...values, objectives: e.target.value })}
-                    placeholder="Enter objectives"
-                />
+
+                {/*<input*/}
+                {/*    type="text"*/}
+                {/*    value={values.objectives}*/}
+                {/*    disabled={currentUser.role == 'MEMBER' ? true : false}*/}
+                {/*    onChange={(e) => setValues({ ...values, objectives: e.target.value })}*/}
+                {/*    placeholder="Enter objectives"*/}
+                {/*/>*/}
+                <TagsInput/>
             </div>
 
             <div className="project_inline_box">
