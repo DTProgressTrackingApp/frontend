@@ -28,11 +28,6 @@ function removeTag(index){
 
 return(
         <div className="tags-input-container">
-            {/*<div className="tag-item">*/}
-            {/*    <span className="text">hello</span>*/}
-            {/*    <span className="close">&times;</span>*/}
-            {/*</div>*/}
-
             { tags.map((tag,index) => (
                 <div className="tag-item" key={index}>
                     <span className="text">{tag}</span>
@@ -45,12 +40,6 @@ return(
                 type="text"
                 className="tags-input"
                 placeholder="Enter objectives..."/>
-               {/*//  value={values.objectives}*/}
-               {/*//  disabled={currentUser.role === 'MEMBER' ? true : false}*/}
-               {/*// onChange={(e) => setValues({ ...values, objectives: e.target.value })}/>*/}
-
-
-
         </div>
     )
 }
