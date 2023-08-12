@@ -47,7 +47,7 @@ const LandingPage = ({ onSubProjectClick, subProjects, onSubProjectButtonClick, 
                     <div className="sub-projects-container">
                         <h3 className="sub-projects-heading">Projects :</h3>
                         {
-                            currentUser.role == "MANAGER" &&
+                            currentUser.role === "MANAGER" &&
                                 [
                                     <input type="text" value={subProjectData}
                                        onChange={(e) => handleSubProjectDataChange(e)}
