@@ -6,24 +6,30 @@
 
 
 .C_body {
-    width: 18rem;
-    height: 15rem;
+    width: 19.5rem;
+    height: 17rem;
     background-color: whitesmoke;
-    display: flex;
-    justify-content: center;
+    display:flex;
+    /*display: inline-block;*/
+    flex-wrap: wrap;
+    justify-content:center;
     padding:5px;
     align-items: center;
-
+    /*position:relative;*/
 }
 
-.P_body{
-    width: 18rem;
-    height: 15rem;
-    background-color: whitesmoke;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+/*.P_body{*/
+/*    width: 15rem;*/
+/*    height: 1rem;*/
+/*    background-color: whitesmoke;*/
+/*    !*display:flex;*!*/
+/*    justify-content: right;*/
+/*    align-items: center;*/
+/*    margin-top: 0px;*/
+/*    margin-bottom: 0px;*/
+/*    !*flex-wrap: wrap;*!*/
+/*    !*display: inline-block;*!*/
+/*}*/
 
 /* Remove the top and left positioning properties in .P_title */
 /*.P_title {*/
@@ -57,16 +63,42 @@
 .title{
     font-size: 1.2rem;
     font-weight: bold;
-    display: flex;
+    display:inline-flex;
+    /*position:absolute;*/
     justify-content: center;
     align-items: center;
     background-color: #000000;
-    padding-top: 0.4rem;
-    padding-bottom: 0.4rem;
+    padding-top: 0rem;
+    padding-bottom: 0rem;
     color: #ffffff;
-    width:18rem;
-    margin-top: 10px;
+    width:19.5rem;
+    margin-top: 0px;
+    margin-left: 0px;
+    margin-right: 0px;
+    margin-inside: 0px;
+    margin-bottom:0px;
+}
 
+
+.charts-container{
+    display:flex;
+    flex-direction: row;
+    margin-top: 50px;
+    /*margin-right:.9px;*/
+    align-items: center;
+    margin-bottom: 20px;
+    margin-left: 0px;
+    position: absolute;
+
+}
+.chart-container{
+    display: flex;
+    flex-direction: row;
+    /*align-items: center;*/
+    margin-right: 100px;
+    margin-left: 90px;
+    margin-top: 0px;
+    /*position: absolute;*/
 
 }
 
