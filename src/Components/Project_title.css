@@ -7,7 +7,7 @@
     padding-left: 10px;
     padding-bottom: 10px;
     background-color: #dbe0e4;
-    width: 18rem;
+    width: 19rem;
     flex-direction: column;
     overflow-y: auto;
     height: fit-content;
@@ -55,7 +55,7 @@
 }
 
 .tags-input-container{
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     padding: 3px;
     border-radius: 4px;
     width: min(80vw, 400px);
@@ -101,7 +101,7 @@
 .project_inline_box1{
     display: flex;
     align-items: center;
-    margin-right: 10px;
+    margin-right: 35px;
     margin-bottom: 0;
 }
 
@@ -109,4 +109,81 @@
     padding: 3px;
     border: 1px solid #ccc;
     border-radius: 4px;
+}
+.project_inline_box1 input,
+.project_inline_box1 select {
+    margin-top: 8px;
+    padding: 3px;
+    border: 1px solid #ccc;
+    border-radius:4px;
+}
+
+.project_inline_box1 p {
+    padding-top: 20px;
+    margin-right: 15px;
+}
+
+.form-field {
+    flex: 2;
+}
+.output {
+    margin-left: 3rem;
+    flex: 1;
+}
+.form-field label{
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+    color: rgb(84, 84, 84);
+}
+
+input {
+    height: 35px;
+    width: 100%;
+    padding: 7px;
+    outline: none;
+    border-radius: 5px;
+    border: 1px solid rgb(220, 220, 220);
+}
+
+input:focus {
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.objectives {
+    display: flex;
+    justify-content: space-between;
+}
+.first-division {
+    display: flex;
+    flex-direction: column;
+    margin: 0 5px 0.5rem 0;
+    width: 100%;
+}
+button {
+    background: none;
+    outline: none;
+    cursor: pointer;
+    font-weight: 400;
+    border-radius: 1px;
+    padding: 3px 5px;
+}
+.first-division button {
+    align-self: flex-start;
+    display: flex;
+    align-items: center;
+    margin-top: 0.5rem;
+    color: rgb(0, 0, 0);
+    border: 1px solid rgb(0, 0, 0);
+}
+
+.second-division button {
+    color: red;
+    border: 0px solid red;
+    /*padding-left: 2px;*/
+}
+
+ul{
+    font-size: 10px;
+    color: darkcyan;
 }
