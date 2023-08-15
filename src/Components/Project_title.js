@@ -120,7 +120,7 @@ import {addProjectInfo, getProjectValues} from "../Service/FirestoreService.js";
 // import {getSingleElementValue} from "@testing-library/jest-dom/dist/utils.js";
 // import TagsInput from "./TagsInput.js";
 
-function Project_title({budget, setBudget, currentUser, currentProject, }) {
+function Project_title({budget, setBudget, currentUser, currentProject}) {
     // console.log("budget here:", budget);
 
     const [values, setValues] = useState([]);
@@ -250,6 +250,15 @@ function Project_title({budget, setBudget, currentUser, currentProject, }) {
                     placeholder="Enter drive link"
                 />
             </div>
+            {/*<div className="output">*/}
+            {/*    /!*<h2>output</h2>*!/*/}
+            {/*    {values &&*/}
+            {/*        values.map((singleDriveLink, index) => (*/}
+            {/*            <ul key = {index} >*/}
+            {/*                {singleDriveLink.values && <li>{singleDriveLink.values}</li>}*/}
+            {/*            </ul>*/}
+            {/*        ))}*/}
+            {/*</div>*/}
 
             <div className="project_inline_box">
                 <p style={{ marginRight: "20px", fontSize: "15px" }}>Sponsor</p>

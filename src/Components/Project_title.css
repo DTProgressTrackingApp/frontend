@@ -7,14 +7,16 @@
     padding-left: 10px;
     padding-bottom: 10px;
     background-color: #dbe0e4;
-    width: 19rem;
+    width: 25rem;
     flex-direction: column;
     overflow-y: auto;
+    overflow-x: auto;
     height: fit-content;
 }
 
 .scrollable-project {
     overflow-y: auto;
+    overflow-x: auto;
 }
 
 
@@ -184,6 +186,6 @@ button {
 }
 
 ul{
-    font-size: 10px;
+    font-size: 14px;
     color: darkcyan;
 }
