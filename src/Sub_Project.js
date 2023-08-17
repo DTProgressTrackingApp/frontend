@@ -127,7 +127,7 @@ function Sub_Project({ subProject, onBackButtonClick, currentUser }) {
             <div className="content">
             <div className="container scrollable">
                 <div className="column-container">
-                    <h2 className="project_title">{subProject.id + ' ' + subProject.title}</h2>
+                    <h2 className="project_title">{ subProject.title}</h2>
                     <Project_title budget={budget} setBudget={handleBudgetChange} currentUser={currentUser} currentProject={subProject}/>
                     <Leftside cards={cards} incurredCost={incurredCost} taskBudget={taskBudget} budget={budget} progress={{completed, incompleted, todoWeight, progressWeight, finishWeight}} />
                 </div>
