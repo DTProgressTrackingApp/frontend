@@ -122,12 +122,12 @@
 }
 
 .project_title{
-    height:40px;
-    padding:2rem;
-    width: 18rem;
-    justify-content: center;
-    align-items: center;
-    display: flex;
+    /*height:0px;*/
+    /*padding:0rem;*/
+    width: 20rem;
+    justify-content:center;
+    /*align-items: center;*/
+    display: inline;
 
 
 }
