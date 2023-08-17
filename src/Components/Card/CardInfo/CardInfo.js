@@ -350,6 +350,7 @@ function CardInfo(props) {
     return (
         <Modal onClose={props.onClose}>
             <div className="cardinfo">
+                {/*{values.subTasks?.map((item) => (*/}
 
                 {props.currentUser.role === 'MANAGER' && (
                     <button style={{marginLeft:"72rem", width:'4rem',fontSize: "12px",
@@ -357,8 +358,11 @@ function CardInfo(props) {
                         background: "black",
                         padding:"10px",
                         fontWeight: "bold",
-                        borderRadius: "3px"}}
+                        borderRadius: "3px",
+                        position: "absolute"
+                        }}
                             onClick={updateValues}
+                            // onClick={() => (updateValues,updateSubValues())}
                     >Save</button>
                 )}
 
@@ -398,7 +402,7 @@ function CardInfo(props) {
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <input
-                                type="number"
+                                type="text"
                                 value={values.taskBudget}
                                 onChange={(e) => setValues({ ...values, taskBudget: e.target.value })}
                                 placeholder="Enter Budget"
@@ -414,7 +418,7 @@ function CardInfo(props) {
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center' }}>
                             <input
-                                type="number"
+                                type="text"
                                 value={values.cic}
                                 onChange={(e) => setValues({ ...values, cic: e.target.value })}
                                 placeholder="Enter Current incurred cost"
@@ -433,7 +437,7 @@ function CardInfo(props) {
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center' }}>
                         <input
-                            type="number"
+                            type="text"
                             value={values.kpi}
                             onChange={(e) => setValues({ ...values, kpi: e.target.value })}
                             placeholder="Enter KPI"
@@ -460,10 +464,10 @@ function CardInfo(props) {
                 <div className="cardinfo_inline_boxes">
                     <div className="cardinfo_inline_box">
                         <div className="cardinfo_box_title">
-                            <p>Weight (%)</p>
+                            <p>Weight (Project assigns weight to task '%')</p>
                         </div>
                         <input
-                            type="number"
+                            type="text"
                             value={weight}
                             onChange={handleWeightChange}
                             placeholder="Enter Weight (max 100)"
@@ -485,7 +489,7 @@ function CardInfo(props) {
                             <p>Achieved Weight (%)</p>
                         </div>
                         <input
-                            type="number"
+                            type="text"
                             value={achievedWeight}
                             onChange={handleAchievedWeightChange}
                             placeholder="Enter achieved weight (max 100)"
@@ -710,7 +714,8 @@ function CardInfo(props) {
 
                                     {props.currentUser.role === 'MANAGER' && (
                                         <td >
-                                            <button style={{ width: "4rem",  }} onClick={() => updateSubValues(item)} disabled={props.currentUser.role == 'MEMBER' ? true : false}>Save subtask</button>
+                                            <button style={{ width: "4rem",  }} onClick={() => updateSubValues(item)}
+                                                    disabled={props.currentUser.role == 'MEMBER' ? true : false}>Save subtask</button>
                                         </td>
                                     )}
                                 </tr>
@@ -719,7 +724,7 @@ function CardInfo(props) {
                         </table>
 
                         {props.currentUser.role === 'MANAGER' && (
-                            <button className="addTask" onClick={() => addSubTask("New Task")}>Add sub task</button>
+                            <button className="addTask" onClick={() => addSubTask("") } placeholder="New Task" >Add sub task</button>
                         )}
                     </div>
                 </div>
