@@ -190,6 +190,7 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
         <div className="Project scrollable-project">
             <div className="project_inline_box">
                 <p style={{ marginRight: "32px", fontSize: "15px" }}>Scope</p>
+                {/*{values.map((singleScope,desc) => (*/}
                 <input
                     type="text"
                     value={values.desc}
@@ -197,7 +198,18 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
                     onChange={(e) => setValues({ ...values, desc: e.target.value })}
                     placeholder="Enter scope"
                 />
+                {/*))}*/}
             </div>
+            {/*<div className="output">*/}
+            {/*    /!*<h2>output</h2>*!/*/}
+            {/*    {values &&*/}
+            {/*        values.map((singleScope, desc) => (*/}
+            {/*            <ul key = {desc} >*/}
+            {/*                {singleScope.values && <li>{singleScope.values}</li>}*/}
+            {/*            </ul>*/}
+            {/*        ))}*/}
+            {/*</div>*/}
+
 
 
             <div className="form-field">
@@ -207,25 +219,36 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
                         <div className="first-division">
                             <input name="objective" type="text" id="objective" required
                                    value={singleObjective.value}
-                                   placeholder="Enter Objective"
+                                   placeholder="Enter Objectives...."
                                    onChange={(e) => handleObjectiveChange(e,index)}
                             />
-                            {objective.length - 1 === index && objective.length < 4 &&
-                                (
-                                    <button type="button" className="add-btn"
-                                    onClick={handleObjectiveAdd}>
-                                        <span>Add a Objective</span>
-                                    </button>
-                                )}
+                            {/*{objective.length - 1 === index && objective.length < 10 &&*/}
+                            {/*    (*/}
+                            {/*        <button type="button" className="add-btn"*/}
+                            {/*        onClick={handleObjectiveAdd}>*/}
+                            {/*            <span>+</span>*/}
+                            {/*        </button>*/}
+                            {/*    )}*/}
                         </div>
-                        <div className="second-division">
-                            {objective.length !== 1 && (
-                                <button type="button" className="remove-btn"
-                                onClick ={() => handleObjectiveRemove(index)}>
-                                <span>Remove</span>
-                            </button>
+
+                        <div className="add-btn">
+                            {objective.length - 1 === index && (
+                                <button type="button" className="add-btn"
+                                        onClick={handleObjectiveAdd}>
+                                    <span>+</span>
+                                </button>
                             )}
                         </div>
+                        <div className="second-division">
+                            {objective.length - 1 === index &&  (
+                                <button type="button" className="remove-btn"
+                                        onClick ={() => handleObjectiveRemove(index)}>
+                                    <span><b>-</b></span>
+                                </button>
+
+                            )}
+                        </div>
+
                     </div>
                 ))}
             </div>
@@ -276,7 +299,7 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
                 <p style={{ marginRight: "29px", fontSize: "15px" }}>Budget</p>
                 <div>
                     <input
-                        type="number"
+                        type="text"
                         value={budget}
                         disabled={currentUser.role === 'MEMBER' ? true : false}
                         onChange={handleBudgetChange}
