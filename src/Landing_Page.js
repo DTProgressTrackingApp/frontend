@@ -63,7 +63,7 @@ const LandingPage = ({ onSubProjectClick, subProjects, onSubProjectButtonClick, 
                             {subProjects.map((subProject) => (
                             <li className="sub-project-item" key={subProject.id}>
                                 <button className="sub-project-button" onClick={() => onSubProjectButtonClick(subProject.id)} key={subProject.id}>
-                                    {subProject.id + '  : ' + subProject.title}
+                                    { subProject.title}
                                 </button>
                             </li>
                         ))}

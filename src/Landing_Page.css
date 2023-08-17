@@ -3,10 +3,10 @@
 .landing-page {
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    height: 200vh;
     width: 100%;
     background: linear-gradient(to bottom, #9dfad0, #094473);
-    background-size: cover;
+    background-size:cover;
     overflow: auto;
     position: relative;
 }
