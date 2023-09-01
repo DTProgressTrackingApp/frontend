@@ -14,6 +14,10 @@ function Modal(props) {
       >
         <button className="close_button" onClick={props.onClose}> Close
         </button>
+
+
+
+
         {props.children}
       </div>
     </div>

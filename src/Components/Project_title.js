@@ -117,6 +117,7 @@
 import React, {useEffect, useState} from "react";
 import "./Project_title.css";
 import {addProjectInfo, getProjectValues} from "../Service/FirestoreService.js";
+// import * as singleScope from "chart.js/dist/core/core.ticks.js";
 // import {getSingleElementValue} from "@testing-library/jest-dom/dist/utils.js";
 // import TagsInput from "./TagsInput.js";
 
@@ -132,6 +133,8 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
     );
 
     console.log("objective: ",objective);
+
+
 
     useEffect(() => {
         const fetchData = async () => {
@@ -180,92 +183,69 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
         setObjective(list);
     }
 
+    const handleScopeChange = (e,index)=>{
+        const{name,value} = e.target
+        const list=[values];
+        list[index][name] = value;
+
+        setValues(list);
+    }
+
     const handleBudgetChange = (e) => {
         setBudget(e.target.value);
         setValues({ ...values, budget: e.target.value });
     };
 
+    // function addNewLines(){
+    //     text = document.getElementById('objective').value;
+    //     text=text.replace(/ /g, "[sp] [sp]");
+    //     text=text.replace(/\n/g, "[nl]");
+    //     document.getElementById('objective').value = text;
+    //
+    // }
+
     return (
-// <form className="App" autoComplete="Off">
+<form>
         <div className="Project scrollable-project">
             <div className="project_inline_box">
-                <p style={{ marginRight: "32px", fontSize: "15px" }}>Scope</p>
-                {/*{values.map((singleScope,desc) => (*/}
-                <input
+                <p style={{ marginRight: "40px", fontSize: "15px" }}>Scope</p>
+                <textarea
                     type="text"
                     value={values.desc}
                     disabled={currentUser.role === 'MEMBER' ? true : false}
                     onChange={(e) => setValues({ ...values, desc: e.target.value })}
                     placeholder="Enter scope"
                 />
-                {/*))}*/}
             </div>
-            {/*<div className="output">*/}
-            {/*    /!*<h2>output</h2>*!/*/}
-            {/*    {values &&*/}
-            {/*        values.map((singleScope, desc) => (*/}
-            {/*            <ul key = {desc} >*/}
-            {/*                {singleScope.values && <li>{singleScope.values}</li>}*/}
-            {/*            </ul>*/}
-            {/*        ))}*/}
-            {/*</div>*/}
+            <div className="output">
+                <ul>
+                    <li>
+                        {values.desc}
+                    </li>
+                </ul>
+            </div>
 
 
 
             <div className="form-field">
-                <p style={{ marginRight: "32px", fontSize: "15px" }}>Objective(s)</p>
-                {objective.map((singleObjective,index) => (
-                    <div key={index} className="objectives">
-                        <div className="first-division">
-                            <input name="objective" type="text" id="objective" required
-                                   value={singleObjective.value}
-                                   placeholder="Enter Objectives...."
-                                   onChange={(e) => handleObjectiveChange(e,index)}
+                        <p style={{ marginRight: "8px", fontSize: "15px",  }}>Objective(s)</p>
+                            <textarea
+                                type="text"
+                                value={values.objectives}
+                                placeholder="Enter Objectives...."
+                                onChange={(e) => setValues({ ...values, objectives: e.target.value })}
                             />
-                            {/*{objective.length - 1 === index && objective.length < 10 &&*/}
-                            {/*    (*/}
-                            {/*        <button type="button" className="add-btn"*/}
-                            {/*        onClick={handleObjectiveAdd}>*/}
-                            {/*            <span>+</span>*/}
-                            {/*        </button>*/}
-                            {/*    )}*/}
-                        </div>
-
-                        <div className="add-btn">
-                            {objective.length - 1 === index && (
-                                <button type="button" className="add-btn"
-                                        onClick={handleObjectiveAdd}>
-                                    <span>+</span>
-                                </button>
-                            )}
-                        </div>
-                        <div className="second-division">
-                            {objective.length - 1 === index &&  (
-                                <button type="button" className="remove-btn"
-                                        onClick ={() => handleObjectiveRemove(index)}>
-                                    <span><b>-</b></span>
-                                </button>
-
-                            )}
-                        </div>
-
                     </div>
-                ))}
-            </div>
-            <div className="output">
-                {/*<h2>output</h2>*/}
-                {objective &&
-                    objective.map((singleObjective, index) => (
-                        <ul key = {index} >
-                            {singleObjective.objective && <li>{singleObjective.objective}</li>}
-                        </ul>
-                    ))}
-            </div>
 
-            
+
+    <div className="output">
+        <ul>
+            <li>{values.objectives}</li>
+        </ul>
+    </div>
             <div className="project_inline_box">
-                <p style={{ marginRight: "8px", fontSize: "15px" }}>Drive links</p>
-                <input
+                <p style={{ marginRight: "11px", fontSize: "15px", marginBottom:"15px" }}>Drivelink(s)</p>
+                <textarea
                     type="text"
                     value={values.driveLink}
                     disabled={currentUser.role === 'MEMBER' ? true : false}
@@ -273,19 +253,22 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
                     placeholder="Enter drive link"
                 />
             </div>
-            {/*<div className="output">*/}
-            {/*    /!*<h2>output</h2>*!/*/}
-            {/*    {values &&*/}
-            {/*        values.map((singleDriveLink, index) => (*/}
-            {/*            <ul key = {index} >*/}
-            {/*                {singleDriveLink.values && <li>{singleDriveLink.values}</li>}*/}
-            {/*            </ul>*/}
-            {/*        ))}*/}
-            {/*</div>*/}
+
+            <div className="output">
+                <ul>
+                        <li>
+                            <a href>
+
+                        {values.driveLink}
+                            </a>
+                        </li>
+
+                </ul>
+            </div>
 
             <div className="project_inline_box">
-                <p style={{ marginRight: "20px", fontSize: "15px" }}>Sponsor</p>
-                <input
+                <p style={{ marginRight: "28px", fontSize: "15px", marginBottom:"15px" }}>Sponsor</p>
+                <textarea
                     type="text"
                     value={values.sponsor}
                     disabled={currentUser.role === 'MEMBER' ? true : false}
@@ -293,12 +276,19 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
                     placeholder="Enter sponsor"
                 />
             </div>
+            <div className="output">
+                <ul>
+                    <li>
+                        {values.sponsor}
+                    </li>
+                </ul>
+            </div>
 
             <div className="project_inline_box budget">
 
-                <p style={{ marginRight: "29px", fontSize: "15px" }}>Budget</p>
+                <p style={{ marginRight: "34px", fontSize: "15px" }}>Budget</p>
                 <div>
-                    <input
+                    <textarea
                         type="text"
                         value={budget}
                         disabled={currentUser.role === 'MEMBER' ? true : false}
@@ -309,7 +299,7 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
                 </div>
             </div>
         </div>
-// </form>
+</form>
     );
 }
 

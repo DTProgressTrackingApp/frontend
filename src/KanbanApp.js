@@ -258,7 +258,8 @@ function KanbanApp({currentProject, setProject, currentUser}) {
     setTotalWeight(value);
   };
 
-  const shiftSubTaskStatus = async (task, output) => {
+  const shiftSubTaskStatus = async (task, output, event) => {
+    event.preventDefault()
     console.log("shiftSubTaskStatus, taskId: " + task.id + ", output: " + output);
     // const saveProject = JSON.parse(localStorage.getItem("prac-kanban"));
 
@@ -280,13 +281,13 @@ function KanbanApp({currentProject, setProject, currentUser}) {
           progressTask.push(task);
           findProject.progressTask = [];
           findProject.progressTask = progressTask;
-        } else if ('completed' === output) {
+        }else if ('completed' === output) {
           finishTask.push(task);
           findProject.finishTask = [];
           findProject.finishTask = finishTask;
         }
       } else if (findProject.progressTask.find(t => t.id === task.id)) {
-          if (('inprogress' === output)) {
+          if ('inprogress' === output) {
             return;
           }
           const removeProgressTask = progressTask.filter(t => t.id !== task.id);
@@ -297,7 +298,7 @@ function KanbanApp({currentProject, setProject, currentUser}) {
             todoTask.push(task);
             findProject.todoTask = [];
             findProject.todoTask = todoTask;
-          } else if ('completed' === output) {
+          }else  if ('completed' === output) {
             finishTask.push(task);
             findProject.finishTask = [];
             findProject.finishTask = finishTask;
@@ -314,7 +315,7 @@ function KanbanApp({currentProject, setProject, currentUser}) {
           todoTask.push(task);
           findProject.todoTask = [];
           findProject.todoTask = todoTask;
-        } else if ('inprogress' === output) {
+        }else  if ('inprogress' === output) {
           progressTask.push(task);
           findProject.progressTask = [];
           findProject.progressTask = progressTask;

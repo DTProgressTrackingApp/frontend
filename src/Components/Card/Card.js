@@ -12,7 +12,7 @@ function Card(props) {
     const [reload, setReload] = useState(false);
     const [card, setCard] = useState(props.card);
 
-    const { id, title, startDate, subTasks, kpi, kpiDesc,  taskBudget, cic, weight,achievedWeight, endDate, actualStartDate,actualEndDate } = card;
+    const { id, title, startDate, subTasks, kpiDesc,  taskBudget, cic, weight,achievedWeight, endDate, actualStartDate,actualEndDate } = card;
 
     const formatDate = (value) => {
         if (!value) return "";
@@ -29,8 +29,9 @@ function Card(props) {
         setCard(card);
     }
 
-    const shiftSubTaskStatus = async (task, output) => {
-        await props.shiftSubTaskStatus(task, output);
+    const shiftSubTaskStatus = async (task, output, event) => {
+        event.preventDefault()
+        await props.shiftSubTaskStatus(task, output, event);
         setCard(task);
     }
 
@@ -81,11 +82,11 @@ function Card(props) {
                     </div>
                 </div>
 
-                {kpi && kpiDesc &&(
+                {  kpiDesc &&(
                     <div className="card_info">
                         <span className="card_info_label">KPI:</span>
-                        <span className="card_info_value">{kpi}</span>
-                        <span className="card_info_value" style={{marginLeft:'10px'}}>{kpiDesc}</span>
+                        {/*<span className="card_info_value">{kpi}</span>*/}
+                        <span className="card_info_value" style={{marginLeft:'10px', marginRight:'60px'}}>{kpiDesc}</span>
                     </div>
                 )}
 

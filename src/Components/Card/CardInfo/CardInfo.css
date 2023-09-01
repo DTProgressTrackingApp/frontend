@@ -67,8 +67,6 @@ padding-right: 10px;
 }
 
 
-
-
 .cardinfo_box input[type="date"] {
   width: fit-content;
   border-radius: 5px;
@@ -123,7 +121,7 @@ padding-right: 10px;
 }
 
 .addTask{
-
+  width: 700%;
 }
 
 
