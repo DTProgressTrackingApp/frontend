@@ -117,9 +117,13 @@
 import React, {useEffect, useState} from "react";
 import "./Project_title.css";
 import {addProjectInfo, getProjectValues} from "../Service/FirestoreService.js";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import {faPenToSquare, faTrash} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 // import * as singleScope from "chart.js/dist/core/core.ticks.js";
 // import {getSingleElementValue} from "@testing-library/jest-dom/dist/utils.js";
 // import TagsInput from "./TagsInput.js";
+
 
 function Project_title({budget, setBudget, currentUser, currentProject}) {
     // console.log("budget here:", budget);
@@ -203,6 +207,43 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
     //     document.getElementById('objective').value = text;
     //
     // }
+    const listContainer = document.getElementById("list-container");
+    const inputBox = document.getElementById("input-box");
+
+
+    function addTask(event) {
+        event.preventDefault()
+        if (inputBox.value === '') {
+            alert("You must write something!");
+        } else {
+            let li = document.createElement("li");
+            li.innerHTML = inputBox.value;
+            listContainer.appendChild(li);
+            let span = document.createElement("span");
+            span.innerHTML = "\u00d7";
+            li.appendChild(span)
+        }
+        inputBox.value = "";
+    }
+
+    listContainer.addEventListener("click", function (e) {
+        // if(e.target.tagName === "LI"){
+        //     e.target.classList.toggle("checked");
+        // }
+        if (e.target.tagName === "SPAN") {
+            e.target.parentElement.remove();
+        }
+
+    }, false);
+
+
+    function onEditDesc(){
+
+    }
+
+
+
+
 
     return (
 <form>
@@ -210,19 +251,16 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
             <div className="project_inline_box">
                 <p style={{ marginRight: "40px", fontSize: "15px" }}>Scope</p>
                 <textarea
+                    rows={10}
+                    cols={5}
                     type="text"
                     value={values.desc}
-                    disabled={currentUser.role === 'MEMBER' ? true : false}
+                    // disabled={currentUser.role === 'MEMBER' ? true : false}
                     onChange={(e) => setValues({ ...values, desc: e.target.value })}
                     placeholder="Enter scope"
                 />
-            </div>
-            <div className="output">
-                <ul>
-                    <li>
-                        {values.desc}
-                    </li>
-                </ul>
+                <FontAwesomeIcon icon={faPenToSquare}
+                                 onClick={(event) => onEditDesc(event,values.desc)}/>
             </div>
 
 
@@ -230,19 +268,19 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
             <div className="form-field">
                         <p style={{ marginRight: "8px", fontSize: "15px",  }}>Objective(s)</p>
                             <textarea
+                                rows={10}
+                                cols={5}
                                 type="text"
                                 value={values.objectives}
                                 placeholder="Enter Objectives...."
                                 onChange={(e) => setValues({ ...values, objectives: e.target.value })}
                             />
+                <FontAwesomeIcon icon={faPenToSquare}
+                                 onClick={(event) => onEditDesc(event,values.objectives)}/>
                     </div>
 
 
-    <div className="output">
-        <ul>
-            <li>{values.objectives}</li>
-        </ul>
-    </div>
+
             <div className="project_inline_box">
                 <p style={{ marginRight: "11px", fontSize: "15px", marginBottom:"15px" }}>Drivelink(s)</p>
                 <textarea
@@ -252,19 +290,12 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
                     onChange={(e) => setValues({ ...values, driveLink: e.target.value })}
                     placeholder="Enter drive link"
                 />
+                <FontAwesomeIcon icon={faPenToSquare}
+
+                                 onClick={(event) => onEditDesc(event,values.driveLink)}/>
             </div>
 
-            <div className="output">
-                <ul>
-                        <li>
-                            <a href>
 
-                        {values.driveLink}
-                            </a>
-                        </li>
-
-                </ul>
-            </div>
 
             <div className="project_inline_box">
                 <p style={{ marginRight: "28px", fontSize: "15px", marginBottom:"15px" }}>Sponsor</p>
@@ -275,14 +306,42 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
                     onChange={(e) => setValues({ ...values, sponsor: e.target.value })}
                     placeholder="Enter sponsor"
                 />
+                <FontAwesomeIcon icon={faPenToSquare}
+                                 onClick={(event) => onEditDesc(event,values.sponsor)}/>
             </div>
+
+
+
+            <div className="project_inline_box_task">
+                <p style={{ marginRight: "28px", fontSize: "15px", marginBottom:"15px" }}>Tasks</p>
+                <input
+                    id="input-box"
+                    type="text"
+                    value={values.task}
+                    disabled={currentUser.role === 'MEMBER' ? true : false}
+                    onChange={(e) => setValues({ ...values, task: e.target.value })}
+                    placeholder="Enter Task"
+                />
+                <button className="taskAdd" onClick={(event) => addTask(event)}>
+                    Add
+                </button>
+
+            </div>
+
+
+
             <div className="output">
-                <ul>
-                    <li>
-                        {values.sponsor}
-                    </li>
-                </ul>
+            <ol id="list-container">
+                {/*<li className="checked">Task 1</li>*/}
+                {/*<li>Task 2</li>*/}
+                {/*<li>Task 3</li>*/}
+            </ol>
             </div>
+
+
+
+
+
 
             <div className="project_inline_box budget">
 
@@ -296,11 +355,14 @@ function Project_title({budget, setBudget, currentUser, currentProject}) {
                         placeholder="Enter budget"
                         style={{ width: "90px" }}
                     /> <span style={{ fontSize: "12px"}}>LKR</span>
+                    <FontAwesomeIcon icon={faPenToSquare}
+                                     onClick={(event) => onEditDesc(event,budget)}/>
                 </div>
             </div>
         </div>
 </form>
     );
+// }
 }
 
 export default Project_title;
